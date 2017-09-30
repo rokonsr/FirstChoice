@@ -1,0 +1,106 @@
+﻿@model FirstChoiceApp.Models.CompanyInfo
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<p class="page-title">Edit Company Information</p>
+<hr class="hr-title" />
+<br />
+
+@using (Html.BeginForm("Edit", "Company", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @*@Html.AntiForgeryToken()*@
+  <table>
+            <tr>
+                <td>
+                    <div class="form-horizontal">
+                        
+                        @Html.ValidationSummary(true)
+                        @Html.HiddenFor(model => model.Id)
+
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.CompanyName, new {@class = "control-label col-md-4"})
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.CompanyName) <br/>
+                                @Html.ValidationMessageFor(model => model.CompanyName)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.CompanyLogo, new {@class = "control-label col-md-4"})
+                            <div class="col-md-8">
+                                @*@Html.EditorFor(model => model.Logo)*@
+                                <input type="file" name="logo" id="logo"/>
+                                @Html.ValidationMessageFor(model => model.CompanyLogo)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.OwnerName, new {@class = "control-label col-md-4"})
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.OwnerName) <br/>
+                                @Html.ValidationMessageFor(model => model.OwnerName)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ContactNo, new {@class = "control-label col-md-4"})
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.ContactNo) <br/>
+                                @Html.ValidationMessageFor(model => model.ContactNo)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Email, new {@class = "control-label col-md-4"})
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.Email) <br/>
+                                @Html.ValidationMessageFor(model => model.Email)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Address, new {@class = "control-label col-md-4"})
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.Address) <br/>
+                                @Html.ValidationMessageFor(model => model.Address)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-4 col-md-8">
+                                <input type="submit" value="Update" class="btn btn-default"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-4 col-md-8">
+                                <span style="color: green; font-weight: bold;">@ViewBag.Success</span>
+                                <span style="color: red; font-weight: bold;">@ViewBag.Error</span>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td style="width: 30px;"></td>
+                <td style="text-align: center;">
+                    <b>Logo</b> <br />
+                    <img src="data:image;base64,@System.Convert.ToBase64String(Model.CompanyLogo)" width="150" height="150" style="border-radius: 3px;" />
+                </td>
+            </tr>
+        </table>
+
+   
+
+    
+    
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

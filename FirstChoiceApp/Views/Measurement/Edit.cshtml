@@ -1,0 +1,50 @@
+﻿@model FirstChoiceApp.Models.Measurement
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<p class="page-title">Edit Measurement</p>
+<hr class="hr-title" />
+<br />
+
+
+@using (Html.BeginForm())
+{
+    @*@Html.AntiForgeryToken()*@
+    
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MeasurementName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.MeasurementName)
+                @Html.ValidationMessageFor(model => model.MeasurementName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Update" class="btn btn-default" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <span style="color: green; font-weight: bold;">@ViewBag.Success</span>
+                <span style="color: red; font-weight: bold;">@ViewBag.Error</span>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

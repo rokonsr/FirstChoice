@@ -1,0 +1,230 @@
+﻿@model FirstChoiceApp.Models.Product
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<p class="page-title">Create Product</p>
+<hr class="hr-title" />
+<br />
+
+
+@using (Html.BeginForm())
+{
+    @*@Html.AntiForgeryToken()*@
+    
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.BrandId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.BrandId, new SelectList(ViewBag.Brand, "Id", "BrandName"), "--Select Brand--", new { @class = "ddl-style" })
+                @Html.ValidationMessageFor(model => model.BrandId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ItemId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.ItemId, new SelectList(ViewBag.Item, "Id", "ItemName"), "--Select Item--", new { @class = "ddl-style" })
+                @Html.ValidationMessageFor(model => model.ItemId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MeasurementId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.MeasurementId, new SelectList(ViewBag.Measurement, "Id", "MeasurementName"), "--Select Measurement--", new { @class = "ddl-style" })
+                @Html.ValidationMessageFor(model => model.MeasurementId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SizeId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.SizeId, new SelectList(""), "--Select Product Size--", new { @class = "ddl-style" })
+                @Html.ValidationMessageFor(model => model.SizeId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TypeId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.TypeId, new SelectList(""), "--Select Product Type--", new { @class = "ddl-style" })
+                @Html.ValidationMessageFor(model => model.TypeId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProductCode, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ProductCode, new { htmlAttributes = new { @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.ProductCode, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProductName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ProductName, new { htmlAttributes = new { @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.ProductName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" id="btnSubmit" value="Create" class="btn btn-primary" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <span style="color: green; font-weight: bold;">@ViewBag.Success</span>
+                <span style="color: red; font-weight: bold;">@ViewBag.Error</span>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+            $("#ItemId").change(function () {
+                var itemId = $("#ItemId").val();
+
+                $('#SizeId').empty();
+                $('#TypeId').empty();
+
+                CreateProductCode();
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetItemDetails", "Product")',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({ itemId: itemId }),
+
+                    success: function (itemDetails) {
+                        $("#SizeId").append('<option value="">' + "--Select Product Size--" + '</option>');
+                        $.each(itemDetails.objSize, function(key, value) {
+                            $("#SizeId").append('<option value=' + value.Id + '>' + value.ProductSize + '</option>');
+                        });
+
+                        $("#TypeId").append('<option value="">' + "--Select Product Type--" + '</option>');
+                        $.each(itemDetails.objProductType, function(key, value) {
+                            $("#TypeId").append('<option value=' + value.Id + '>' + value.TypeName + '</option>');
+                        });
+                    },
+                });
+            });
+
+            $("#BrandId").change(function () {
+                $("#ItemId").val($("#ItemId option:first").val());
+                $("#MeasurementId").val($("#MeasurementId option:first").val());
+                $("#SizeId").val($("#SizeId option:first").val());
+                $("#TypeId").val($("#TypeId option:first").val());
+                CreateProductCode();
+            });
+            $("#ItemId").change(function () {
+                $("#MeasurementId").val($("#MeasurementId option:first").val());
+                $("#SizeId").val($("#SizeId option:first").val());
+                $("#TypeId").val($("#TypeId option:first").val());
+                CreateProductCode();
+            });
+            $("#MeasurementId").change(function () {
+                $("#SizeId").val($("#SizeId option:first").val());
+                $("#TypeId").val($("#TypeId option:first").val());
+                CreateProductCode();
+            });
+            $("#SizeId").change(function () {
+                $("#TypeId").val($("#TypeId option:first").val());
+                CreateProductCode();
+            });
+            $("#TypeId").change(function () {
+                CreateProductCode();
+            });
+
+            function CreateProductCode() {
+                // Generate Product Code
+                var brandId = $("#BrandId").val();
+                var itemId = $("#ItemId").val();
+                var measurementId = $("#MeasurementId").val();
+                var sizeId = $("#SizeId").val() != null ? $("#SizeId").val() : "";
+                var typeId = $("#TypeId").val() != null ? $("#TypeId").val() : "";
+
+                $('#ProductCode').val("");
+                $('#ProductCode').val(brandId + itemId + measurementId + sizeId + typeId);
+
+                // Generate Product Name
+
+                var brandIdT = $("#BrandId option:selected").text() != "--Select Brand--" ? $("#BrandId option:selected").text() + "-" : "";
+                var itemIdT = $("#ItemId option:selected").text() != "--Select Item--" ? $("#ItemId option:selected").text() + "-" : "";
+                var measurementIdT = $("#MeasurementId option:selected").text() != "--Select Measurement--" ? $("#MeasurementId option:selected").text() : "";
+                var sizeIdT = $("#SizeId option:selected").text() != "--Select Product Size--" ? $("#SizeId option:selected").text() : "";
+                var typeIdT = $("#TypeId option:selected").text() != "--Select Product Type--" ? $("#TypeId option:selected").text() : "";
+
+                var countSizeList = $('#SizeId option').size();
+                var countTypeList = $('#TypeId option').size();
+                var i = countSizeList > 1 ? "-" : "";
+                var s = countTypeList > 1 & sizeId > 0 ? "-" : "";
+
+                $('#ProductName').val("");
+                $('#ProductName').val(brandIdT + itemIdT + measurementIdT + i + sizeIdT + s + typeIdT);
+            }
+        });
+
+        $("#btnSubmit").on("click", function () {
+            var countSizeList = $('#SizeId option').size();
+            if (countSizeList > 1) {
+                $("#SizeId").rules("add", {
+                    required: true,
+                    messages: {
+                        required: "Product size is required"
+                    }
+                });
+                $("#TypeId").rules("remove", "required");
+            } else {
+                $("#SizeId").rules("remove", "required");
+            }
+
+            var countTypeList = $('#TypeId option').size();
+            if (countTypeList > 1) {
+                $("#TypeId").rules("add", {
+                    required: true,
+                    messages: {
+                        required: "Product type is required"
+                    }
+                });
+            }
+            else {
+                $("#TypeId").rules("remove", "required");
+            }
+
+            $("#MeasurementName").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '@Url.Action("AutoComplete", "Measurement")',
+                        type: "POST",
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.MeasurementName, value: item.MeasurementName };
+                            }))
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        });
+
+    </script>
+}

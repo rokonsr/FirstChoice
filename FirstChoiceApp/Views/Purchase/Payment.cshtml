@@ -1,0 +1,129 @@
+﻿@model FirstChoiceApp.Models.PurchaseLedger
+
+@{
+    ViewBag.Title = "Payment";
+}
+
+<p class="page-title">Payment Settlement</p>
+<hr class="hr-title" />
+<br />
+
+@using (Html.BeginForm()) 
+{
+    @*@Html.AntiForgeryToken()*@
+    
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.SupplierId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.SupplierId, new SelectList(ViewBag.SupplierList, "SupplierId", "SupplierName"), "--Select Supplier--", new { @class = "ddl-style" })
+                @Html.ValidationMessageFor(model => model.SupplierId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DueAmount, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DueAmount, new { htmlAttributes = new { @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.DueAmount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PaidAmount, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.PaidAmount)
+                @Html.ValidationMessageFor(model => model.PaidAmount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Balance, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Balance, new { htmlAttributes = new { @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.Balance, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Paid Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.PaidDate, new { htmlAttributes = new { @class = "datePicker" } })
+                @Html.ValidationMessageFor(model => model.PaidDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Remarks, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Remarks, 3, 33, null)
+                @Html.ValidationMessageFor(model => model.Remarks, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Paid" class="btn btn-primary" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <span style="color: green; font-weight: bold;">@ViewBag.Success</span>
+                <span style="color: red; font-weight: bold;">@ViewBag.Error</span>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-ui.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(function () {
+                $(".datePicker").datepicker({ dateFormat: 'd M, yy', type: Text });
+            });
+
+            $("#PaidAmount").keyup(function () {
+                Balance();
+            });
+        });
+
+        $("#SupplierId").change(function() {
+            var supplierId = $("#SupplierId").val();
+
+            if (supplierId == 0) {
+                $("#DueAmount").val("");
+                $("#PaidAmount").val("");
+                $("#Balance").val("");
+                $("#CreatedDate").val("");
+                $("#Remarks").val("");
+            }
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetSupplierDue", "Purchase")',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({ supplierId: supplierId }),
+
+                success: function (supplierDue) {
+                    $("#DueAmount").val(supplierDue);
+                    Balance();
+                },
+            });
+        });
+
+        function Balance() {
+            var dueAmount = $("#DueAmount").val();
+            var paidAmount = $("#PaidAmount").val();
+            var balance = dueAmount - paidAmount;
+
+            $("#Balance").val(balance);
+        }
+
+</script>
+}

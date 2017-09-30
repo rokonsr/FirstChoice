@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    @*@Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")*@
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <table style="width:100%">
+                <tr>
+                    <td style="width:120px;">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            @Html.ActionLink("First Choice", "Index", "Home", null, new { @class = "navbar-brand", @style = "color:#fff" })
+                        </div>
+                    </td>
+                    <td>
+                        <div class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                                <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                                @*<li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Basic Setup <span class="caret"></span></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                                        <li>@Html.ActionLink("Company", "Index", "Company")</li>
+                                        <li>@Html.ActionLink("Supplier", "Index", "Supplier")</li>
+                                        <li>@Html.ActionLink("Customer", "Index", "Customer")</li>
+                                        <li>@Html.ActionLink("Category", "Index", "Category")</li>
+                                        <li>@Html.ActionLink("Brand", "Index", "Brand")</li>
+                                        <li>@Html.ActionLink("Measurement", "Index", "Measurement")</li>
+                                        <li>@Html.ActionLink("Size", "Index", "Size")</li>
+                                        <li>@Html.ActionLink("Item", "Index", "Item")</li>
+                                        <li>@Html.ActionLink("Product Type", "Index", "ProductType")</li>
+                                        <li>@Html.ActionLink("Product", "Index", "Product")</li>
+                                        <li>@Html.ActionLink("Purchase", "Create", "Purchase")</li>
+                                        <li>@Html.ActionLink("Ledger", "Ledger", "Purchase")</li>
+                                        <li>@Html.ActionLink("Payment", "Payment", "Purchase")</li>
+                                    </ul>
+                                </li>*@
+                            </ul>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="padding:15px 0; text-align:right;">
+                            @Html.ActionLink("Logout", "Logout", "Login")
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="container body-content">
+
+        <div class="col-md-3">
+            <nav class="navbar navbar-default">
+                <ul class="nav navbar-default">
+                    <li>@Html.ActionLink("Category", "Index", "Category")</li>
+                    <li>@Html.ActionLink("Brand", "Index", "Brand")</li>
+                    <li>@Html.ActionLink("Item", "Index", "Item")</li>
+                    <li>@Html.ActionLink("Measurement", "Index", "Measurement")</li>
+                    <li>@Html.ActionLink("Size", "Index", "Size")</li>
+                    <li>@Html.ActionLink("Product Type", "Index", "ProductType")</li>
+                    <li>@Html.ActionLink("Product", "Index", "Product")</li>
+                    <li>@Html.ActionLink("Purchase", "Create", "Purchase")</li>
+                    <li>@Html.ActionLink("Sale", "Create", "Sale")</li>
+
+                    @*<li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Company", "Index", "Company")</li>
+                    <li>@Html.ActionLink("Supplier", "Index", "Supplier")</li>
+                    <li>@Html.ActionLink("Customer", "Index", "Customer")</li>
+                    <li>@Html.ActionLink("Purchase", "Create", "Purchase")</li>
+                    <li>@Html.ActionLink("Ledger", "Ledger", "Purchase")</li>
+                    <li>@Html.ActionLink("Payment", "Payment", "Purchase")</li>*@
+                </ul>
+            </nav>
+        </div>
+        <div class="col-md-9">
+            @RenderBody()
+        </div>
+        
+    </div>
+
+    @*<hr />
+    <footer>
+        <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+    </footer>*@
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    @*@Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")*@
+    @RenderSection("scripts", required: false)
+</body>
+</html>

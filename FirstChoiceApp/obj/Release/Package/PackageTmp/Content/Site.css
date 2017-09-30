@@ -1,0 +1,55 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+    background-color: aliceblue;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+/* Custom CSS */
+
+.text-box, .text-area, .ddl-style {
+    width: 250px;
+    height: 30px;
+    padding: 0px 3px;
+}
+
+.field-validation-error {
+    color: red;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.form-group {
+    margin-bottom: 5px;
+}
+
+.page-title {
+    font-size:18px;
+    font-weight:bold;
+    margin:5px 0 0 0;
+}
+
+.hr-title {
+    background-color: black;
+    height: 2px;
+    margin: 0;
+}

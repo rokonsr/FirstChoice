@@ -1,0 +1,83 @@
+﻿@model FirstChoiceApp.Models.Item
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<p class="page-title">Create Item</p>
+<hr class="hr-title" />
+<br />
+
+
+@using (Html.BeginForm()) 
+{
+    @*@Html.AntiForgeryToken()*@
+    
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.CategoryId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.CategoryId, new SelectList(ViewBag.Category, "Id", "CategoryName"), "--Select Category--", new { @class = "ddl-style" })
+                @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ItemName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ItemName)
+                @Html.ValidationMessageFor(model => model.ItemName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <span style="color: green; font-weight: bold;">@ViewBag.Success</span>
+                <span style="color: red; font-weight: bold;">@ViewBag.Error</span>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-ui.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#ItemName").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '@Url.Action("AutoComplete", "Item")',
+                        type: "POST",
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.ItemName, value: item.ItemName };
+                            }))
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+}
