@@ -346,7 +346,8 @@
 
                     success: function (objProduct) {
                         $("#ProductCode").val(objProduct.ProductCode);
-                        $("#PurchaseRate").val(objProduct.Price);
+                        $("#PurchaseRate").val(0);
+                        $("#SaleRate").val(objProduct.Price);
                     },
                 });
             });
@@ -368,7 +369,8 @@
 
                     success: function (objProduct) {
                         $("#ProductId").val(objProduct.Id);
-                        $("#PurchaseRate").val(objProduct.Price);
+                        $("#PurchaseRate").val(0);
+                        $("#SaleRate").val(objProduct.Price);
                     },
                 });
             });
