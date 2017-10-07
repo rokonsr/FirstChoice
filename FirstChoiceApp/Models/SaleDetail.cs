@@ -1,4 +1,6 @@
-﻿namespace FirstChoiceApp.Models
+﻿using System;
+
+namespace FirstChoiceApp.Models
 {
     public class SaleDetail
     {

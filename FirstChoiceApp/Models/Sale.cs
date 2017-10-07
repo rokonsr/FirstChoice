@@ -12,6 +12,8 @@ namespace FirstChoiceApp.Models
                 
         public DateTime SaleDate { get; set; }
 
+        public string InvoiceNo { get; set; }
+
         [Required(ErrorMessage = "Required")]
         public decimal TotalAmount { get; set; }
 

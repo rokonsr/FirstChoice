@@ -173,6 +173,7 @@
     <Compile Include="Gateway\ProductGateway.cs" />
     <Compile Include="Gateway\ProductTypeGateway.cs" />
     <Compile Include="Gateway\PurchaseGateway.cs" />
+    <Compile Include="Gateway\SaleGateway.cs" />
     <Compile Include="Gateway\SizeGateway.cs" />
     <Compile Include="Gateway\SupplierGateway.cs" />
     <Compile Include="Global.asax.cs">
@@ -188,6 +189,7 @@
     <Compile Include="Manager\ProductManager.cs" />
     <Compile Include="Manager\ProductTypeManager.cs" />
     <Compile Include="Manager\PurchaseManager.cs" />
+    <Compile Include="Manager\SaleManager.cs" />
     <Compile Include="Manager\SizeManager.cs" />
     <Compile Include="Manager\SupplierManager.cs" />
     <Compile Include="Models\Brand.cs" />
