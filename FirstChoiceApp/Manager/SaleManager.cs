@@ -1,6 +1,7 @@
 ﻿using System;
 using FirstChoiceApp.Models;
 using FirstChoiceApp.Gateway;
+using System.Collections.Generic;
 
 namespace FirstChoiceApp.Manager
 {
@@ -15,12 +16,17 @@ namespace FirstChoiceApp.Manager
 
         internal int GetSaleId(Sale objSale)
         {
-            throw new NotImplementedException();
+            return objSaleGateway.GetSaleId(objSale);
         }
 
         internal void CreateSaleDetail(SaleDetail objSaleDetail)
         {
-            throw new NotImplementedException();
+            objSaleGateway.CreateSaleDetail(objSaleDetail);
+        }
+
+        internal List<SaleLedger> GetSaleLedger()
+        {
+            return objSaleGateway.GetSaleLedger();
         }
     }
 }

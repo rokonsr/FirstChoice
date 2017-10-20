@@ -39,6 +39,11 @@ namespace FirstChoiceApp.Controllers
             {
                 SaleManager objSaleManager = new SaleManager();
 
+                if (objSale.SaleType == 1)
+                {
+                    objSale.InvoiceNo = DateTime.Now.ToString("yyMMddHHmmss");
+                }
+
                 if (objSaleManager.CreateSale(objSale))
                 {
                     int SaleId = objSaleManager.GetSaleId(objSale);
@@ -58,26 +63,25 @@ namespace FirstChoiceApp.Controllers
                         objSaleDetail.SaleId = SaleId;
                         objSaleDetail.ProductId = item.ProductId;
                         objSaleDetail.Quantity = item.Quantity;
-                        objSaleDetail.PurchaseRate = item.PurchaseRate;
                         objSaleDetail.SaleRate = item.SaleRate;
 
                         objSaleManager.CreateSaleDetail(objSaleDetail);
                     }
-                    ViewBag.Message = "Add product succesfully";
+                    ViewBag.Message = "product sale succesfully";
                     ModelState.Clear();
                     Session["SaleDetail"] = null;
                 }
             }
             catch (Exception)
             {
-                @ViewBag.Error = "Product add failed";
+                @ViewBag.Error = "Product sale failed";
             }
 
             return View();
         }
 
         [HttpPost]
-        public JsonResult SaleDetails(int productId, decimal quantity, decimal purchaseRate, decimal saleRate, string productName)
+        public JsonResult SaleDetails(int productId, decimal quantity, decimal saleRate, string productName)
         {
             bool isExist = false;
             var list = Session["SaleDetail"] as List<SaleDetail>;
@@ -96,7 +100,6 @@ namespace FirstChoiceApp.Controllers
                     {
                         ProductId = productId,
                         ProductName = productName,
-                        PurchaseRate = purchaseRate,
                         SaleRate = saleRate,
                         Quantity = quantity
                     };
@@ -149,6 +152,7 @@ namespace FirstChoiceApp.Controllers
             foreach (var item in objProductList)
             {
                 objProduct.ProductCode = item.ProductCode;
+                objProduct.Stock = item.Stock;
                 objProduct.Price = item.Price;
             }
 
@@ -166,6 +170,7 @@ namespace FirstChoiceApp.Controllers
             foreach (var item in objProductList)
             {
                 objProduct.Id = item.Id;
+                objProduct.Stock = item.Stock;
                 objProduct.Price = item.Price;
             }
 
@@ -173,12 +178,12 @@ namespace FirstChoiceApp.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetSupplierDue(int customerId)
+        public JsonResult GetCustomerDue(int customerId)
         {
-            PurchaseManager objPurchaseManager = new PurchaseManager();
-            var supplierDue = objPurchaseManager.GetPurchaseLedger().Where(x => x.SupplierId == customerId).Select(x => x.Balance);
+            SaleManager objSaleManager = new SaleManager();
+            var customerDue = objSaleManager.GetSaleLedger().Where(x => x.CustomerId == customerId).Select(x => x.Balance);
 
-            return Json(supplierDue, JsonRequestBehavior.AllowGet);
+            return Json(customerDue, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

@@ -24,6 +24,6 @@ namespace FirstChoiceApp.Models
         [Required(ErrorMessage = "Required")]
         public int SaleType { get; set; }
 
-        public DateTime CreatedDate { get; set; }
+        //public DateTime CreatedDate { get; set; }
     }
 }
