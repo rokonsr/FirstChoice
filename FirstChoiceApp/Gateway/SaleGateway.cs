@@ -29,6 +29,54 @@ namespace FirstChoiceApp.Gateway
             return countAffectedRow;
         }
 
+        internal List<Product> GetProductByInvoiceNo(string invoiceNo)
+        {
+            List<Product> objProductList = new List<Product>();
+
+            SqlCommand command = new SqlCommand("uspGetProductForSaleByInvoiceNo", objConnection.Connection());
+            command.Parameters.AddWithValue("InvoiceNo", invoiceNo);
+            command.CommandType = CommandType.StoredProcedure;
+            SqlDataReader reader = command.ExecuteReader();
+
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    Product objProduct = new Product()
+                    {
+                        Id = Convert.ToInt32(reader["Id"]),
+                        ProductName = reader["ProductName"].ToString()
+                    };
+                    objProductList.Add(objProduct);
+                }
+            }
+            return objProductList;
+        }
+
+        internal List<Sale> GetAllSale()
+        {
+            List<Sale> objSaleList = new List<Sale>();
+
+            string query = "SELECT * FROM Sale";
+
+            SqlCommand command = new SqlCommand(query, objConnection.Connection());
+            SqlDataReader reader = command.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    Sale objSale = new Sale()
+                    {
+                        CustomerId = Convert.ToInt32(reader["CustomerId"]),
+                        InvoiceNo = reader["InvoiceNo"].ToString(),
+                        SaleType = Convert.ToInt32(reader["SaleType"])
+                    };
+                    objSaleList.Add(objSale);
+                }
+            }
+            return objSaleList;
+        }
+
         internal List<SaleLedger> GetSaleLedger()
         {
             List<SaleLedger> saleLedgerList = new List<SaleLedger>();

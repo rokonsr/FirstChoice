@@ -194,9 +194,9 @@
 
 
             $("#InvoiceNo").change(function () {
+                $('#ProductId').empty();
                 if ($("#SaleType").val() == 2) {
                     var invoiceNo = $("#InvoiceNo").val();
-                    $('#ProductId').empty();
                     $("#ProductId").append('<option value="">' + "--Select Product--" + '</option>');
 
                     $.ajax({

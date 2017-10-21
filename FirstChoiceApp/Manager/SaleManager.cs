@@ -28,5 +28,15 @@ namespace FirstChoiceApp.Manager
         {
             return objSaleGateway.GetSaleLedger();
         }
+
+        internal List<Sale> GetAllSale()
+        {
+            return objSaleGateway.GetAllSale();
+        }
+
+        internal List<Product> GetProductByInvoiceNo(string invoiceNo)
+        {
+            return objSaleGateway.GetProductByInvoiceNo(invoiceNo);
+        }
     }
 }

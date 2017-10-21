@@ -72,9 +72,10 @@ namespace FirstChoiceApp.Controllers
                     Session["SaleDetail"] = null;
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
                 @ViewBag.Error = "Product sale failed";
+                string msg = exception.Message;
             }
 
             return View();
@@ -189,9 +190,9 @@ namespace FirstChoiceApp.Controllers
         [HttpPost]
         public JsonResult AutoComplete(string Prefix, int customerId)
         {
-            PurchaseManager objPurchaseManager = new PurchaseManager();
+            SaleManager objSaleManager = new SaleManager();
 
-            var invoiceNo = objPurchaseManager.GetAllPurchase().Where(x => x.InvoiceNo.StartsWith(Prefix.ToLower()) || x.InvoiceNo.StartsWith(Prefix.ToUpper())).Where(x => x.SupplierId == customerId).Where(x => x.PurchaseType == 1).Take(10);
+            var invoiceNo = objSaleManager.GetAllSale().Where(x => x.InvoiceNo.Contains(Prefix.ToLower()) || x.InvoiceNo.Contains(Prefix.ToUpper())).Where(x => x.CustomerId == customerId).Where(x => x.SaleType == 1).Take(10);
 
             return Json(invoiceNo, JsonRequestBehavior.AllowGet);
         }
@@ -200,7 +201,8 @@ namespace FirstChoiceApp.Controllers
         public JsonResult GetProduct(string invoiceNo)
         {
             PurchaseManager objPurchaseManager = new PurchaseManager();
-            var productList = objPurchaseManager.GetProductByInvoiceNo(invoiceNo).ToList();
+            SaleManager objSaleMnager = new SaleManager();
+            var productList = objSaleMnager.GetProductByInvoiceNo(invoiceNo).ToList();
 
             return Json(productList, JsonRequestBehavior.AllowGet);
         }
