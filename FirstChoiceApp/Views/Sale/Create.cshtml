@@ -346,18 +346,34 @@
                 $('#SaleRate').val("");
                 $('#TotalPrice').val("");
 
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("GetProductById", "Sale")',
-                    contentType: "application/json; charset=utf-8",
-                    data: JSON.stringify({ productId: productId }),
+                if ($("#SaleType").val() == 2) {
+                    var invoiceNo = $("#InvoiceNo").val();
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetProductByIdInvoice", "Sale")',
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify({ productId: productId, invoiceNo: invoiceNo }),
 
-                    success: function (objProduct) {
-                        $("#ProductCode").val(objProduct.ProductCode);
-                        $("#Stock").val(objProduct.Stock);
-                        $("#SaleRate").val(objProduct.Price);
-                    },
-                });
+                        success: function (objProduct) {
+                            $("#ProductCode").val(objProduct.ProductCode);
+                            $("#Stock").val(objProduct.Stock);
+                            $("#SaleRate").val(objProduct.Price);
+                        },
+                    });
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetProductById", "Sale")',
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify({ productId: productId }),
+
+                        success: function (objProduct) {
+                            $("#ProductCode").val(objProduct.ProductCode);
+                            $("#Stock").val(objProduct.Stock);
+                            $("#SaleRate").val(objProduct.Price);
+                        },
+                    });
+                };
             });
 
             $("#ProductCode").change(function() {
@@ -369,18 +385,35 @@
                 $('#SaleRate').val("");
                 $('#TotalPrice').val("");
 
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("GetProductByCode", "Sale")',
-                    contentType: "application/json; charset=utf-8",
-                    data: JSON.stringify({ productCode: productCode }),
+                if ($("#SaleType").val() == 2) {
+                    var invoiceNo = $("#InvoiceNo").val();
 
-                    success: function (objProduct) {
-                        $("#ProductId").val(objProduct.Id);
-                        $("#Stock").val(objProduct.Stock);
-                        $("#SaleRate").val(objProduct.Price);
-                    },
-                });
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetProductByCodeInvoice", "Sale")',
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify({ productCode: productCode, invoiceNo: invoiceNo }),
+
+                        success: function (objProduct) {
+                            $("#ProductId").val(objProduct.Id);
+                            $("#Stock").val(objProduct.Stock);
+                            $("#SaleRate").val(objProduct.Price);
+                        },
+                    });
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetProductByCode", "Sale")',
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify({ productCode: productCode }),
+
+                        success: function (objProduct) {
+                            $("#ProductId").val(objProduct.Id);
+                            $("#Stock").val(objProduct.Stock);
+                            $("#SaleRate").val(objProduct.Price);
+                        },
+                    });
+                };
             });
 
             $("#Quantity").change(function () {

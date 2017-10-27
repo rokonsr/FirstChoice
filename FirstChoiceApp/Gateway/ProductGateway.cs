@@ -8,40 +8,54 @@ namespace FirstChoiceApp.Gateway
 {
     public class ProductGateway
     {
-        DbConnection objConnection = new DbConnection();
+        private DbConnection strCon = new DbConnection();
 
         internal List<Product> GetAllProduct()
         {
             List<Product> objProductList = new List<Product>();
 
-            SqlCommand command = new SqlCommand("uspGetAllProduct", objConnection.Connection());
-            command.CommandType = CommandType.StoredProcedure;
-            SqlDataReader reader = command.ExecuteReader();
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            if (reader.HasRows)
+            try
             {
-                while (reader.Read())
+                SqlCommand command = new SqlCommand("uspGetAllProduct", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
                 {
-                    Product objProduct = new Product()
+                    while (reader.Read())
                     {
-                        Id = Convert.ToInt32(reader["Id"]),
-                        BrandId = Convert.ToInt32(reader["BrandId"]),
-                        BrandName = reader["BrandName"].ToString(),
-                        ItemId = Convert.ToInt32(reader["ItemId"]),
-                        ItemName = reader["ItemName"].ToString(),
-                        MeasurementId = Convert.ToInt32(reader["MeasurementId"]),
-                        MeasurementName = reader["MeasurementName"].ToString(),
-                        SizeId = Convert.ToInt32(reader["SizeId"]),
-                        ProductSize = reader["ProductSize"].ToString(),
-                        TypeId = Convert.ToInt32(reader["TypeId"]),
-                        Stock = Convert.ToDecimal(reader["Stock"]),
-                        Price = Convert.ToDecimal(reader["Price"]),
-                        TypeName = reader["TypeName"].ToString(),
-                        ProductCode = reader["ProductCode"].ToString(),
-                        ProductName = reader["ProductName"].ToString()
-                    };
-                    objProductList.Add(objProduct);
+                        Product objProduct = new Product()
+                        {
+                            Id = Convert.ToInt32(reader["Id"]),
+                            BrandId = Convert.ToInt32(reader["BrandId"]),
+                            BrandName = reader["BrandName"].ToString(),
+                            ItemId = Convert.ToInt32(reader["ItemId"]),
+                            ItemName = reader["ItemName"].ToString(),
+                            MeasurementId = Convert.ToInt32(reader["MeasurementId"]),
+                            MeasurementName = reader["MeasurementName"].ToString(),
+                            SizeId = Convert.ToInt32(reader["SizeId"]),
+                            ProductSize = reader["ProductSize"].ToString(),
+                            TypeId = Convert.ToInt32(reader["TypeId"]),
+                            Stock = Convert.ToDecimal(reader["Stock"]),
+                            Price = Convert.ToDecimal(reader["Price"]),
+                            TypeName = reader["TypeName"].ToString(),
+                            ProductCode = reader["ProductCode"].ToString(),
+                            ProductName = reader["ProductName"].ToString()
+                        };
+                        objProductList.Add(objProduct);
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
             }
             return objProductList;
         }
@@ -81,18 +95,31 @@ namespace FirstChoiceApp.Gateway
         {
             int countAffectedRow = 0;
 
-            SqlCommand command = new SqlCommand("uspCreateProduct", objConnection.Connection());
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("BrandId", objProduct.BrandId);
-            command.Parameters.AddWithValue("ItemId", objProduct.ItemId);
-            command.Parameters.AddWithValue("MeasurementId", objProduct.MeasurementId);
-            command.Parameters.AddWithValue("SizeId", objProduct.SizeId);
-            command.Parameters.AddWithValue("TypeId", objProduct.TypeId);
-            command.Parameters.AddWithValue("ProductCode", objProduct.ProductCode);
-            command.Parameters.AddWithValue("ProductName", objProduct.ProductName);
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            countAffectedRow = command.ExecuteNonQuery();
+            try
+            {
+                SqlCommand command = new SqlCommand("uspCreateProduct", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("BrandId", objProduct.BrandId);
+                command.Parameters.AddWithValue("ItemId", objProduct.ItemId);
+                command.Parameters.AddWithValue("MeasurementId", objProduct.MeasurementId);
+                command.Parameters.AddWithValue("SizeId", objProduct.SizeId);
+                command.Parameters.AddWithValue("TypeId", objProduct.TypeId);
+                command.Parameters.AddWithValue("ProductCode", objProduct.ProductCode);
+                command.Parameters.AddWithValue("ProductName", objProduct.ProductName);
 
+                countAffectedRow = command.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
             return countAffectedRow;
         }
     }

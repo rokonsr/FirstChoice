@@ -10,7 +10,7 @@ namespace FirstChoiceApp.Gateway
 {
     public class MeasurementGateway
     {
-        DbConnection objConnection = new DbConnection();
+        private DbConnection strCon = new DbConnection();
 
         internal List<Measurement> GetAllMeasurement()
         {
@@ -18,20 +18,34 @@ namespace FirstChoiceApp.Gateway
 
             string query = "SELECT * FROM Measurement";
 
-            SqlCommand command = new SqlCommand(query, objConnection.Connection());
-            SqlDataReader reader = command.ExecuteReader();
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            if (reader.HasRows)
+            try
             {
-                while (reader.Read())
+                SqlCommand command = new SqlCommand(query, conn);
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
                 {
-                    Measurement objMeasurement = new Measurement()
+                    while (reader.Read())
                     {
-                        Id = Convert.ToInt32(reader["Id"]),
-                        MeasurementName = reader["MeasurementName"].ToString()
-                    };
-                    objMeasurementList.Add(objMeasurement);
+                        Measurement objMeasurement = new Measurement()
+                        {
+                            Id = Convert.ToInt32(reader["Id"]),
+                            MeasurementName = reader["MeasurementName"].ToString()
+                        };
+                        objMeasurementList.Add(objMeasurement);
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
             }
             return objMeasurementList;
         }
@@ -40,13 +54,26 @@ namespace FirstChoiceApp.Gateway
         {
             int countAffectedRow = 0;
 
-            SqlCommand command = new SqlCommand("uspUpdateMeasurement", objConnection.Connection());
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("Id", objMeasurement.Id);
-            command.Parameters.AddWithValue("MeasurementName", objMeasurement.MeasurementName);
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            countAffectedRow = command.ExecuteNonQuery();
+            try
+            {
+                SqlCommand command = new SqlCommand("uspUpdateMeasurement", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("Id", objMeasurement.Id);
+                command.Parameters.AddWithValue("MeasurementName", objMeasurement.MeasurementName);
 
+                countAffectedRow = command.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
             return countAffectedRow;
         }
 
@@ -61,12 +88,25 @@ namespace FirstChoiceApp.Gateway
         {
             int countAffectedRow = 0;
 
-            SqlCommand command = new SqlCommand("uspCreateMeasurement", objConnection.Connection());
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("MeasurementName", objMeasurement.MeasurementName);
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            countAffectedRow = command.ExecuteNonQuery();
+            try
+            {
+                SqlCommand command = new SqlCommand("uspCreateMeasurement", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("MeasurementName", objMeasurement.MeasurementName);
 
+                countAffectedRow = command.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
             return countAffectedRow;
         }
     }

@@ -8,24 +8,37 @@ namespace FirstChoiceApp.Gateway
 {
     public class PurchaseGateway
     {
-        DbConnection objConnection = new DbConnection();
+        private DbConnection strCon = new DbConnection();
 
         internal int CreatePurchase(Purchase objPurchase)
         {
             int countAffectedRow = 0;
 
-            SqlCommand command = new SqlCommand("uspCreatePurchase", objConnection.Connection());
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("SupplierId", objPurchase.SupplierId);
-            command.Parameters.AddWithValue("InvoiceNo", objPurchase.InvoiceNo);
-            command.Parameters.AddWithValue("PurchaseDate", objPurchase.PurchaseDate);
-            command.Parameters.AddWithValue("TotalAmount", objPurchase.TotalAmount);
-            command.Parameters.AddWithValue("PaidAmount", objPurchase.PaidAmount);
-            command.Parameters.AddWithValue("DiscountAmount", objPurchase.DiscountAmount);
-            command.Parameters.AddWithValue("PurchaseType", objPurchase.PurchaseType);
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            countAffectedRow = command.ExecuteNonQuery();
+            try
+            {
+                SqlCommand command = new SqlCommand("uspCreatePurchase", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("SupplierId", objPurchase.SupplierId);
+                command.Parameters.AddWithValue("InvoiceNo", objPurchase.InvoiceNo);
+                command.Parameters.AddWithValue("PurchaseDate", objPurchase.PurchaseDate);
+                command.Parameters.AddWithValue("TotalAmount", objPurchase.TotalAmount);
+                command.Parameters.AddWithValue("PaidAmount", objPurchase.PaidAmount);
+                command.Parameters.AddWithValue("DiscountAmount", objPurchase.DiscountAmount);
+                command.Parameters.AddWithValue("PurchaseType", objPurchase.PurchaseType);
 
+                countAffectedRow = command.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
             return countAffectedRow;
         }
 
@@ -33,22 +46,36 @@ namespace FirstChoiceApp.Gateway
         {
             List<Product> objProductList = new List<Product>();
 
-            SqlCommand command = new SqlCommand("uspGetProductByInvoiceNo", objConnection.Connection());
-            command.Parameters.AddWithValue("InvoiceNo", invoiceNo);
-            command.CommandType = CommandType.StoredProcedure;
-            SqlDataReader reader = command.ExecuteReader();
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            if (reader.HasRows)
+            try
             {
-                while (reader.Read())
+                SqlCommand command = new SqlCommand("uspGetProductByInvoiceNo", conn);
+                command.Parameters.AddWithValue("InvoiceNo", invoiceNo);
+                command.CommandType = CommandType.StoredProcedure;
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
                 {
-                    Product objProduct = new Product()
+                    while (reader.Read())
                     {
-                        Id = Convert.ToInt32(reader["Id"]),
-                        ProductName = reader["ProductName"].ToString()
-                    };
-                    objProductList.Add(objProduct);
+                        Product objProduct = new Product()
+                        {
+                            Id = Convert.ToInt32(reader["Id"]),
+                            ProductName = reader["ProductName"].ToString()
+                        };
+                        objProductList.Add(objProduct);
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
             }
             return objProductList;
         }
@@ -57,25 +84,39 @@ namespace FirstChoiceApp.Gateway
         {
             List<PurchaseLedger> purchaseLedgerList = new List<PurchaseLedger>();
 
-            SqlCommand command = new SqlCommand("uspPurchaseLedgerDetail", objConnection.Connection());
-            command.CommandType = CommandType.StoredProcedure;
-            SqlDataReader reader = command.ExecuteReader();
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            if (reader.HasRows)
+            try
             {
-                while (reader.Read())
+                SqlCommand command = new SqlCommand("uspPurchaseLedgerDetail", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
                 {
-                    PurchaseLedger purchaseLedger = new PurchaseLedger()
+                    while (reader.Read())
                     {
-                        SupplierId = reader["SupplierId"] != DBNull.Value ? Convert.ToInt32(reader["SupplierId"]) : 0,
-                        SupplierName = reader["SupplierName"].ToString(),
-                        PurchaseAmount = reader["PurchaseAmount"] != DBNull.Value ? Convert.ToDecimal(reader["PurchaseAmount"]) : 0,
-                        PaidAmount = reader["PaidAmount"] != DBNull.Value ? Convert.ToDecimal(reader["PaidAmount"]) : 0,
-                        Balance = reader["Balance"] != DBNull.Value ? Convert.ToDecimal(reader["Balance"]) : 0,
-                        Status = reader["Status"].ToString()
-                    };
-                    purchaseLedgerList.Add(purchaseLedger);
+                        PurchaseLedger purchaseLedger = new PurchaseLedger()
+                        {
+                            SupplierId = reader["SupplierId"] != DBNull.Value ? Convert.ToInt32(reader["SupplierId"]) : 0,
+                            SupplierName = reader["SupplierName"].ToString(),
+                            PurchaseAmount = reader["PurchaseAmount"] != DBNull.Value ? Convert.ToDecimal(reader["PurchaseAmount"]) : 0,
+                            PaidAmount = reader["PaidAmount"] != DBNull.Value ? Convert.ToDecimal(reader["PaidAmount"]) : 0,
+                            Balance = reader["Balance"] != DBNull.Value ? Convert.ToDecimal(reader["Balance"]) : 0,
+                            Status = reader["Status"].ToString()
+                        };
+                        purchaseLedgerList.Add(purchaseLedger);
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
             }
             return purchaseLedgerList;
         }
@@ -86,36 +127,64 @@ namespace FirstChoiceApp.Gateway
 
             string query = "SELECT * FROM Purchase";
 
-            SqlCommand command = new SqlCommand(query, objConnection.Connection());
-            SqlDataReader reader = command.ExecuteReader();
-            if (reader.HasRows)
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
+
+            try
             {
-                while (reader.Read())
+                SqlCommand command = new SqlCommand(query, conn);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
                 {
-                    Purchase objPurchase = new Purchase()
+                    while (reader.Read())
                     {
-                        SupplierId = Convert.ToInt32(reader["SupplierId"]),
-                        InvoiceNo = reader["InvoiceNo"].ToString(),
-                        PurchaseType = Convert.ToInt32(reader["PurchaseType"])
-                    };
-                    objPurchaseList.Add(objPurchase);
+                        Purchase objPurchase = new Purchase()
+                        {
+                            SupplierId = Convert.ToInt32(reader["SupplierId"]),
+                            InvoiceNo = reader["InvoiceNo"].ToString(),
+                            PurchaseType = Convert.ToInt32(reader["PurchaseType"])
+                        };
+                        objPurchaseList.Add(objPurchase);
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
             }
             return objPurchaseList;
         }
         
         internal void CreatePurchaseDetail(PurchaseDetail objPurchaseDetail)
         {
-            SqlCommand command = new SqlCommand("uspCreatePurchaseDetail", objConnection.Connection());
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("PurchaseType", objPurchaseDetail.PurchaseType);
-            command.Parameters.AddWithValue("PurchaseId", objPurchaseDetail.PurchaseId);
-            command.Parameters.AddWithValue("ProductId", objPurchaseDetail.ProductId);
-            command.Parameters.AddWithValue("PurchaseRate", objPurchaseDetail.PurchaseRate);
-            command.Parameters.AddWithValue("SaleRate", objPurchaseDetail.SaleRate);
-            command.Parameters.AddWithValue("Quantity", objPurchaseDetail.Quantity);
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            command.ExecuteNonQuery();
+            try
+            {
+                SqlCommand command = new SqlCommand("uspCreatePurchaseDetail", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("PurchaseType", objPurchaseDetail.PurchaseType);
+                command.Parameters.AddWithValue("PurchaseId", objPurchaseDetail.PurchaseId);
+                command.Parameters.AddWithValue("ProductId", objPurchaseDetail.ProductId);
+                command.Parameters.AddWithValue("PurchaseRate", objPurchaseDetail.PurchaseRate);
+                command.Parameters.AddWithValue("SaleRate", objPurchaseDetail.SaleRate);
+                command.Parameters.AddWithValue("Quantity", objPurchaseDetail.Quantity);
+
+                command.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
 
         internal int GetPurchaseId(Purchase objPurchase)
@@ -124,14 +193,28 @@ namespace FirstChoiceApp.Gateway
 
             string query = "SELECT Id FROM Purchase WHERE SupplierId = '" + objPurchase.SupplierId + "' AND InvoiceNo = '" + objPurchase.InvoiceNo + "'";
 
-            SqlCommand command = new SqlCommand(query, objConnection.Connection());
-            SqlDataReader reader = command.ExecuteReader();
-            if (reader.HasRows)
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
+
+            try
             {
-                while (reader.Read())
+                SqlCommand command = new SqlCommand(query, conn);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
                 {
-                    purchaseId = Convert.ToInt32(reader["Id"]);
+                    while (reader.Read())
+                    {
+                        purchaseId = Convert.ToInt32(reader["Id"]);
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
             }
             return purchaseId;
         }
@@ -140,14 +223,27 @@ namespace FirstChoiceApp.Gateway
         {
             int countAffectedRow = 0;
 
-            SqlCommand command = new SqlCommand("uspPurchasePayment", objConnection.Connection());
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("SupplierId", purchaseLedger.SupplierId);
-            command.Parameters.AddWithValue("PaidAmount", purchaseLedger.PaidAmount);
-            command.Parameters.AddWithValue("PaidDate", purchaseLedger.PaidDate);
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            countAffectedRow = command.ExecuteNonQuery();
+            try
+            {
+                SqlCommand command = new SqlCommand("uspPurchasePayment", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("SupplierId", purchaseLedger.SupplierId);
+                command.Parameters.AddWithValue("PaidAmount", purchaseLedger.PaidAmount);
+                command.Parameters.AddWithValue("PaidDate", purchaseLedger.PaidDate);
 
+                countAffectedRow = command.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
             return countAffectedRow;
         }
     }

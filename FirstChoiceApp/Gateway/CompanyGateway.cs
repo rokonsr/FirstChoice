@@ -8,19 +8,32 @@ namespace FirstChoiceApp.Gateway
 {
     public class CompanyGateway
     {
-        private DbConnection objConnection = new DbConnection();
+        private DbConnection strCon = new DbConnection();
 
         internal bool IsExist(CompanyInfo objCompanyInfo)
         {
-            bool IsExist;
+            bool IsExist = false;
 
             string query = "SELECT * FROM Company";
 
-            SqlCommand objCommand = new SqlCommand(query, objConnection.Connection());
-            SqlDataReader objReader = objCommand.ExecuteReader();
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            IsExist = objReader.HasRows;
+            try
+            {
+                SqlCommand objCommand = new SqlCommand(query, conn);
+                SqlDataReader objReader = objCommand.ExecuteReader();
 
+                IsExist = objReader.HasRows;
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
             return IsExist;
         }
 
@@ -28,17 +41,30 @@ namespace FirstChoiceApp.Gateway
         {
             int affectedRowCount = 0;
 
-            SqlCommand objCommand = new SqlCommand("uspCreateCompany", objConnection.Connection());
-            objCommand.CommandType = CommandType.StoredProcedure;
-            objCommand.Parameters.AddWithValue("CompanyName", objCompanyInfo.CompanyName);
-            objCommand.Parameters.AddWithValue("OwnerName", objCompanyInfo.OwnerName);
-            objCommand.Parameters.AddWithValue("ContactNo", objCompanyInfo.ContactNo);
-            objCommand.Parameters.AddWithValue("Email", objCompanyInfo.Email);
-            objCommand.Parameters.AddWithValue("Address", objCompanyInfo.Address);
-            objCommand.Parameters.AddWithValue("CompanyLogo", objCompanyInfo.CompanyLogo);
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            affectedRowCount = objCommand.ExecuteNonQuery();
+            try
+            {
+                SqlCommand objCommand = new SqlCommand("uspCreateCompany", conn);
+                objCommand.CommandType = CommandType.StoredProcedure;
+                objCommand.Parameters.AddWithValue("CompanyName", objCompanyInfo.CompanyName);
+                objCommand.Parameters.AddWithValue("OwnerName", objCompanyInfo.OwnerName);
+                objCommand.Parameters.AddWithValue("ContactNo", objCompanyInfo.ContactNo);
+                objCommand.Parameters.AddWithValue("Email", objCompanyInfo.Email);
+                objCommand.Parameters.AddWithValue("Address", objCompanyInfo.Address);
+                objCommand.Parameters.AddWithValue("CompanyLogo", objCompanyInfo.CompanyLogo);
 
+                affectedRowCount = objCommand.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
             return affectedRowCount;
         }
 
@@ -48,24 +74,38 @@ namespace FirstChoiceApp.Gateway
 
             string query = "SELECT * FROM Company";
 
-            SqlCommand objCommand = new SqlCommand(query, objConnection.Connection());
-            SqlDataReader objReader = objCommand.ExecuteReader();
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            if (objReader.HasRows)
+            try
             {
-                while (objReader.Read())
+                SqlCommand objCommand = new SqlCommand(query, conn);
+                SqlDataReader objReader = objCommand.ExecuteReader();
+
+                if (objReader.HasRows)
                 {
-                    objCompanyInfo = new CompanyInfo()
+                    while (objReader.Read())
                     {
-                        Id = Convert.ToInt32(objReader["Id"]),
-                        CompanyName = objReader["CompanyName"].ToString(),
-                        OwnerName = objReader["OwnerName"].ToString(),
-                        ContactNo = objReader["ContactNo"].ToString(),
-                        Address = objReader["Address"].ToString(),
-                        Email = objReader["Email"].ToString(),
-                        CompanyLogo = (byte[])objReader["CompanyLogo"]
-                    };
+                        objCompanyInfo = new CompanyInfo()
+                        {
+                            Id = Convert.ToInt32(objReader["Id"]),
+                            CompanyName = objReader["CompanyName"].ToString(),
+                            OwnerName = objReader["OwnerName"].ToString(),
+                            ContactNo = objReader["ContactNo"].ToString(),
+                            Address = objReader["Address"].ToString(),
+                            Email = objReader["Email"].ToString(),
+                            CompanyLogo = (byte[])objReader["CompanyLogo"]
+                        };
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
             }
             return objCompanyInfo;
         }
@@ -74,18 +114,31 @@ namespace FirstChoiceApp.Gateway
         {
             int affectedRowCount = 0;
 
-            SqlCommand objCommand = new SqlCommand("uspUpdateCompany", objConnection.Connection());
-            objCommand.CommandType = CommandType.StoredProcedure;
-            objCommand.Parameters.AddWithValue("Id", objCompanyInfo.Id);
-            objCommand.Parameters.AddWithValue("CompanyName", objCompanyInfo.CompanyName);
-            objCommand.Parameters.AddWithValue("OwnerName", objCompanyInfo.OwnerName);
-            objCommand.Parameters.AddWithValue("ContactNo", objCompanyInfo.ContactNo);
-            objCommand.Parameters.AddWithValue("Email", objCompanyInfo.Email);
-            objCommand.Parameters.AddWithValue("Address", objCompanyInfo.Address);
-            objCommand.Parameters.AddWithValue("CompanyLogo", objCompanyInfo.CompanyLogo);
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            affectedRowCount = objCommand.ExecuteNonQuery();
+            try
+            {
+                SqlCommand objCommand = new SqlCommand("uspUpdateCompany", conn);
+                objCommand.CommandType = CommandType.StoredProcedure;
+                objCommand.Parameters.AddWithValue("Id", objCompanyInfo.Id);
+                objCommand.Parameters.AddWithValue("CompanyName", objCompanyInfo.CompanyName);
+                objCommand.Parameters.AddWithValue("OwnerName", objCompanyInfo.OwnerName);
+                objCommand.Parameters.AddWithValue("ContactNo", objCompanyInfo.ContactNo);
+                objCommand.Parameters.AddWithValue("Email", objCompanyInfo.Email);
+                objCommand.Parameters.AddWithValue("Address", objCompanyInfo.Address);
+                objCommand.Parameters.AddWithValue("CompanyLogo", objCompanyInfo.CompanyLogo);
 
+                affectedRowCount = objCommand.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
             return affectedRowCount;
         }
     }

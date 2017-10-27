@@ -8,7 +8,7 @@ namespace FirstChoiceApp.Gateway
 {
     public class CategoryGateway
     {
-        DbConnection objConnection = new DbConnection();
+        private DbConnection strCon = new DbConnection();
 
         internal List<Category> GetAllCategory()
         {
@@ -16,20 +16,34 @@ namespace FirstChoiceApp.Gateway
 
             string query = "SELECT * FROM Category";
 
-            SqlCommand command = new SqlCommand(query, objConnection.Connection());
-            SqlDataReader reader = command.ExecuteReader();
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            if (reader.HasRows)
+            try
             {
-                while (reader.Read())
+                SqlCommand command = new SqlCommand(query, conn);
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
                 {
-                    Category objCategory = new Category()
+                    while (reader.Read())
                     {
-                        Id = Convert.ToInt32(reader["Id"]),
-                        CategoryName = reader["CategoryName"].ToString(),
-                    };
-                    objCategoryList.Add(objCategory);
+                        Category objCategory = new Category()
+                        {
+                            Id = Convert.ToInt32(reader["Id"]),
+                            CategoryName = reader["CategoryName"].ToString(),
+                        };
+                        objCategoryList.Add(objCategory);
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
             }
             return objCategoryList;
         }
@@ -38,13 +52,26 @@ namespace FirstChoiceApp.Gateway
         {
             int countAffectedRow = 0;
 
-            SqlCommand command = new SqlCommand("uspUpdateCategory", objConnection.Connection());
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("Id", objCategory.Id);
-            command.Parameters.AddWithValue("CategoryName", objCategory.CategoryName);
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            countAffectedRow = command.ExecuteNonQuery();
+            try
+            {
+                SqlCommand command = new SqlCommand("uspUpdateCategory", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("Id", objCategory.Id);
+                command.Parameters.AddWithValue("CategoryName", objCategory.CategoryName);
 
+                countAffectedRow = command.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
             return countAffectedRow;
         }
 
@@ -59,12 +86,25 @@ namespace FirstChoiceApp.Gateway
         {
             int countAffectedRow = 0;
 
-            SqlCommand command = new SqlCommand("uspCreateCategory", objConnection.Connection());
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("CategoryName", objCategory.CategoryName);
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            countAffectedRow = command.ExecuteNonQuery();
+            try
+            {
+                SqlCommand command = new SqlCommand("uspCreateCategory", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("CategoryName", objCategory.CategoryName);
 
+                countAffectedRow = command.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
             return countAffectedRow;
         }
     }

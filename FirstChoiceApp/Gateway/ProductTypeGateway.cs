@@ -10,29 +10,43 @@ namespace FirstChoiceApp.Gateway
 {
     public class ProductTypeGateway
     {
-        DbConnection objConnection = new DbConnection();
+        private DbConnection strCon = new DbConnection();
 
         internal List<ProductType> GetAllProductType()
         {
             List<ProductType> objProductTypeList = new List<ProductType>();
 
-            SqlCommand command = new SqlCommand("uspGetAllProductType", objConnection.Connection());
-            command.CommandType = CommandType.StoredProcedure;
-            SqlDataReader reader = command.ExecuteReader();
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            if (reader.HasRows)
+            try
             {
-                while (reader.Read())
+                SqlCommand command = new SqlCommand("uspGetAllProductType", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
                 {
-                    ProductType objProductType = new ProductType()
+                    while (reader.Read())
                     {
-                        Id = Convert.ToInt32(reader["Id"]),
-                        TypeName = reader["TypeName"].ToString(),
-                        ItemId = Convert.ToInt32(reader["ItemId"]),
-                        ItemName = reader["ItemName"].ToString()
-                    };
-                    objProductTypeList.Add(objProductType);
+                        ProductType objProductType = new ProductType()
+                        {
+                            Id = Convert.ToInt32(reader["Id"]),
+                            TypeName = reader["TypeName"].ToString(),
+                            ItemId = Convert.ToInt32(reader["ItemId"]),
+                            ItemName = reader["ItemName"].ToString()
+                        };
+                        objProductTypeList.Add(objProductType);
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
             }
             return objProductTypeList;
         }
@@ -41,14 +55,27 @@ namespace FirstChoiceApp.Gateway
         {
             int countAffectedRow = 0;
 
-            SqlCommand command = new SqlCommand("uspUpdateProductType", objConnection.Connection());
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("Id", objProductType.Id);
-            command.Parameters.AddWithValue("TypeName", objProductType.TypeName);
-            command.Parameters.AddWithValue("ItemId", objProductType.ItemId);
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            countAffectedRow = command.ExecuteNonQuery();
+            try
+            {
+                SqlCommand command = new SqlCommand("uspUpdateProductType", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("Id", objProductType.Id);
+                command.Parameters.AddWithValue("TypeName", objProductType.TypeName);
+                command.Parameters.AddWithValue("ItemId", objProductType.ItemId);
 
+                countAffectedRow = command.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
             return countAffectedRow;
         }
 
@@ -63,13 +90,26 @@ namespace FirstChoiceApp.Gateway
         {
             int countAffectedRow = 0;
 
-            SqlCommand command = new SqlCommand("uspCreateProductType", objConnection.Connection());
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("TypeName", objProductType.TypeName);
-            command.Parameters.AddWithValue("ItemId", objProductType.ItemId);
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            countAffectedRow = command.ExecuteNonQuery();
+            try
+            {
+                SqlCommand command = new SqlCommand("uspCreateProductType", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("TypeName", objProductType.TypeName);
+                command.Parameters.AddWithValue("ItemId", objProductType.ItemId);
 
+                countAffectedRow = command.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
             return countAffectedRow;
         }
     }

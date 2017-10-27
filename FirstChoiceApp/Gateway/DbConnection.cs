@@ -5,13 +5,9 @@ namespace FirstChoiceApp.Gateway
 {
     public class DbConnection
     {
-        public SqlConnection Connection()
+        public string Connection()
         {
-            string conStr = ConfigurationManager.ConnectionStrings["FcConnection"].ConnectionString;
-
-            SqlConnection con = new SqlConnection(conStr);
-            con.Open();
-            return con;
+            return ConfigurationManager.ConnectionStrings["FcConnection"].ConnectionString;
         }
-    }
+    } 
 }

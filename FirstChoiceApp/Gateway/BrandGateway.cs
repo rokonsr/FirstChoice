@@ -8,7 +8,7 @@ namespace FirstChoiceApp.Gateway
 {
     public class BrandGateway
     {
-        DbConnection objConnection = new DbConnection();
+        private DbConnection strCon = new DbConnection();
 
         internal List<Brand> GetAllBrand()
         {
@@ -16,20 +16,34 @@ namespace FirstChoiceApp.Gateway
 
             string query = "SELECT * FROM Brand";
 
-            SqlCommand command = new SqlCommand(query, objConnection.Connection());
-            SqlDataReader reader = command.ExecuteReader();
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            if (reader.HasRows)
+            try
             {
-                while (reader.Read())
+                SqlCommand command = new SqlCommand(query, conn);
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
                 {
-                    Brand objBrand = new Brand()
+                    while (reader.Read())
                     {
-                        Id = Convert.ToInt32(reader["Id"]),
-                        BrandName = reader["BrandName"].ToString()
-                    };
-                    objBrandList.Add(objBrand);
+                        Brand objBrand = new Brand()
+                        {
+                            Id = Convert.ToInt32(reader["Id"]),
+                            BrandName = reader["BrandName"].ToString()
+                        };
+                        objBrandList.Add(objBrand);
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
             }
             return objBrandList;
         }
@@ -38,13 +52,26 @@ namespace FirstChoiceApp.Gateway
         {
             int countAffectedRow = 0;
 
-            SqlCommand command = new SqlCommand("uspUpdateBrand", objConnection.Connection());
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("Id", objBrand.Id);
-            command.Parameters.AddWithValue("BrandName", objBrand.BrandName);
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            countAffectedRow = command.ExecuteNonQuery();
+            try
+            {
+                SqlCommand command = new SqlCommand("uspUpdateBrand", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("Id", objBrand.Id);
+                command.Parameters.AddWithValue("BrandName", objBrand.BrandName);
 
+                countAffectedRow = command.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
             return countAffectedRow;
         }
 
@@ -59,12 +86,25 @@ namespace FirstChoiceApp.Gateway
         {
             int countAffectedRow = 0;
 
-            SqlCommand command = new SqlCommand("uspCreateBrand", objConnection.Connection());
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("BrandName", objBrand.BrandName);
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            countAffectedRow = command.ExecuteNonQuery();
+            try
+            {
+                SqlCommand command = new SqlCommand("uspCreateBrand", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("BrandName", objBrand.BrandName);
 
+                countAffectedRow = command.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
             return countAffectedRow;
         }
     }

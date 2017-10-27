@@ -8,29 +8,43 @@ namespace FirstChoiceApp.Gateway
 {
     public class ItemGateway
     {
-        DbConnection objConnection = new DbConnection();
+        private DbConnection strCon = new DbConnection();
 
         internal List<Item> GetAllItem()
         {
             List<Item> objItemList = new List<Item>();
 
-            SqlCommand command = new SqlCommand("uspGetAllItem", objConnection.Connection());
-            command.CommandType = CommandType.StoredProcedure;
-            SqlDataReader reader = command.ExecuteReader();
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            if (reader.HasRows)
+            try
             {
-                while (reader.Read())
+                SqlCommand command = new SqlCommand("uspGetAllItem", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
                 {
-                    Item objItem = new Item()
+                    while (reader.Read())
                     {
-                        Id = Convert.ToInt32(reader["Id"]),
-                        ItemName = reader["ItemName"].ToString(),
-                        CategoryId = Convert.ToInt32(reader["CategoryId"]),
-                        CategoryName = reader["CategoryName"].ToString()
-                    };
-                    objItemList.Add(objItem);
+                        Item objItem = new Item()
+                        {
+                            Id = Convert.ToInt32(reader["Id"]),
+                            ItemName = reader["ItemName"].ToString(),
+                            CategoryId = Convert.ToInt32(reader["CategoryId"]),
+                            CategoryName = reader["CategoryName"].ToString()
+                        };
+                        objItemList.Add(objItem);
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
             }
             return objItemList;
         }
@@ -45,13 +59,26 @@ namespace FirstChoiceApp.Gateway
         {
             int countAffectedRow = 0;
 
-            SqlCommand command = new SqlCommand("uspCreateItem", objConnection.Connection());
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("ItemName", objItem.ItemName);
-            command.Parameters.AddWithValue("CategoryId", objItem.CategoryId);
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            countAffectedRow = command.ExecuteNonQuery();
+            try
+            {
+                SqlCommand command = new SqlCommand("uspCreateItem", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("ItemName", objItem.ItemName);
+                command.Parameters.AddWithValue("CategoryId", objItem.CategoryId);
 
+                countAffectedRow = command.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
             return countAffectedRow;
         }
 
@@ -59,14 +86,27 @@ namespace FirstChoiceApp.Gateway
         {
             int countAffectedRow = 0;
 
-            SqlCommand command = new SqlCommand("uspUpdateItem", objConnection.Connection());
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("Id", objItem.Id);
-            command.Parameters.AddWithValue("ItemName", objItem.ItemName);
-            command.Parameters.AddWithValue("CategoryId", objItem.CategoryId);
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            countAffectedRow = command.ExecuteNonQuery();
+            try
+            {
+                SqlCommand command = new SqlCommand("uspUpdateItem", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("Id", objItem.Id);
+                command.Parameters.AddWithValue("ItemName", objItem.ItemName);
+                command.Parameters.AddWithValue("CategoryId", objItem.CategoryId);
 
+                countAffectedRow = command.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
             return countAffectedRow;
         }
     }

@@ -10,29 +10,43 @@ namespace FirstChoiceApp.Gateway
 {
     public class SizeGateway
     {
-        DbConnection objConnection = new DbConnection();
+        private DbConnection strCon = new DbConnection();
 
         internal List<Size> GetAllSize()
         {
             List<Size> objSizeList = new List<Size>();
 
-            SqlCommand command = new SqlCommand("uspGetAllSize", objConnection.Connection());
-            command.CommandType = CommandType.StoredProcedure;
-            SqlDataReader reader = command.ExecuteReader();
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            if (reader.HasRows)
+            try
             {
-                while (reader.Read())
+                SqlCommand command = new SqlCommand("uspGetAllSize", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
                 {
-                    Size objSize = new Size()
+                    while (reader.Read())
                     {
-                        Id = Convert.ToInt32(reader["Id"]),
-                        ProductSize = reader["ProductSize"].ToString(),
-                        ItemId = Convert.ToInt32(reader["ItemId"]),
-                        ItemName = reader["ItemName"].ToString()
-                    };
-                    objSizeList.Add(objSize);
+                        Size objSize = new Size()
+                        {
+                            Id = Convert.ToInt32(reader["Id"]),
+                            ProductSize = reader["ProductSize"].ToString(),
+                            ItemId = Convert.ToInt32(reader["ItemId"]),
+                            ItemName = reader["ItemName"].ToString()
+                        };
+                        objSizeList.Add(objSize);
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
             }
             return objSizeList;
         }
@@ -41,14 +55,27 @@ namespace FirstChoiceApp.Gateway
         {
             int countAffectedRow = 0;
 
-            SqlCommand command = new SqlCommand("uspUpdateProductSize", objConnection.Connection());
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("Id", objSize.Id);
-            command.Parameters.AddWithValue("ProductSize", objSize.ProductSize);
-            command.Parameters.AddWithValue("ItemId", objSize.ItemId);
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            countAffectedRow = command.ExecuteNonQuery();
+            try
+            {
+                SqlCommand command = new SqlCommand("uspUpdateProductSize", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("Id", objSize.Id);
+                command.Parameters.AddWithValue("ProductSize", objSize.ProductSize);
+                command.Parameters.AddWithValue("ItemId", objSize.ItemId);
 
+                countAffectedRow = command.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
             return countAffectedRow;
         }
 
@@ -63,13 +90,26 @@ namespace FirstChoiceApp.Gateway
         {
             int countAffectedRow = 0;
 
-            SqlCommand command = new SqlCommand("uspCreateProductSize", objConnection.Connection());
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("ItemId", objSize.ItemId);
-            command.Parameters.AddWithValue("ProductSize", objSize.ProductSize);
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            countAffectedRow = command.ExecuteNonQuery();
+            try
+            {
+                SqlCommand command = new SqlCommand("uspCreateProductSize", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("ItemId", objSize.ItemId);
+                command.Parameters.AddWithValue("ProductSize", objSize.ProductSize);
 
+                countAffectedRow = command.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
             return countAffectedRow;
         }
     }

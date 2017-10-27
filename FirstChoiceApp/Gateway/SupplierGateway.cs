@@ -8,7 +8,7 @@ namespace FirstChoiceApp.Gateway
 {
     public class SupplierGateway
     {
-        private DbConnection objDbConnection = new DbConnection();
+        private DbConnection strCon = new DbConnection();
 
         internal List<SupplierInfo> GetAllSupplier()
         {
@@ -16,23 +16,37 @@ namespace FirstChoiceApp.Gateway
 
             string query = "SELECT * FROM Supplier";
 
-            SqlCommand objCommand = new SqlCommand(query, objDbConnection.Connection());
-            SqlDataReader objReader = objCommand.ExecuteReader();
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            if (objReader.HasRows)
+            try
             {
-                while (objReader.Read())
+                SqlCommand objCommand = new SqlCommand(query, conn);
+                SqlDataReader objReader = objCommand.ExecuteReader();
+
+                if (objReader.HasRows)
                 {
-                    SupplierInfo objSupplierInfo = new SupplierInfo()
+                    while (objReader.Read())
                     {
-                        Id = Convert.ToInt32(objReader["Id"]),
-                        SupplierName = objReader["SupplierName"].ToString(),
-                        ContactNo = objReader["ContactNo"].ToString(),
-                        Email = objReader["Email"].ToString(),
-                        Address = objReader["Address"].ToString()
-                    };
-                    objSupplierInfos.Add(objSupplierInfo);
+                        SupplierInfo objSupplierInfo = new SupplierInfo()
+                        {
+                            Id = Convert.ToInt32(objReader["Id"]),
+                            SupplierName = objReader["SupplierName"].ToString(),
+                            ContactNo = objReader["ContactNo"].ToString(),
+                            Email = objReader["Email"].ToString(),
+                            Address = objReader["Address"].ToString()
+                        };
+                        objSupplierInfos.Add(objSupplierInfo);
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
             }
             return objSupplierInfos;
         }
@@ -41,16 +55,29 @@ namespace FirstChoiceApp.Gateway
         {
             int affectedRowCount = 0;
 
-            SqlCommand objCommand = new SqlCommand("uspUpdateSupplier", objDbConnection.Connection());
-            objCommand.CommandType = CommandType.StoredProcedure;
-            objCommand.Parameters.AddWithValue("Id", objSupplierInfo.Id);
-            objCommand.Parameters.AddWithValue("SupplierName", objSupplierInfo.SupplierName);
-            objCommand.Parameters.AddWithValue("ContactNo", objSupplierInfo.ContactNo);
-            objCommand.Parameters.AddWithValue("Email", objSupplierInfo.Email);
-            objCommand.Parameters.AddWithValue("Address", objSupplierInfo.Address);
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            affectedRowCount = objCommand.ExecuteNonQuery();
+            try
+            {
+                SqlCommand objCommand = new SqlCommand("uspUpdateSupplier", conn);
+                objCommand.CommandType = CommandType.StoredProcedure;
+                objCommand.Parameters.AddWithValue("Id", objSupplierInfo.Id);
+                objCommand.Parameters.AddWithValue("SupplierName", objSupplierInfo.SupplierName);
+                objCommand.Parameters.AddWithValue("ContactNo", objSupplierInfo.ContactNo);
+                objCommand.Parameters.AddWithValue("Email", objSupplierInfo.Email);
+                objCommand.Parameters.AddWithValue("Address", objSupplierInfo.Address);
 
+                affectedRowCount = objCommand.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
             return affectedRowCount;
         }
 
@@ -60,22 +87,36 @@ namespace FirstChoiceApp.Gateway
 
             string query = "SELECT * FROM SUPPLIER WHERE Id = '" + id + "'";
 
-            SqlCommand objCommand = new SqlCommand(query, objDbConnection.Connection());
-            SqlDataReader objReader = objCommand.ExecuteReader();
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            if (objReader.HasRows)
+            try
             {
-                while (objReader.Read())
+                SqlCommand objCommand = new SqlCommand(query, conn);
+                SqlDataReader objReader = objCommand.ExecuteReader();
+
+                if (objReader.HasRows)
                 {
-                    objSupplier = new SupplierInfo()
+                    while (objReader.Read())
                     {
-                        Id = Convert.ToInt32(objReader["Id"]),
-                        SupplierName = objReader["SupplierName"].ToString(),
-                        ContactNo = objReader["ContactNo"].ToString(),
-                        Email = objReader["Email"].ToString(),
-                        Address = objReader["Address"].ToString()
-                    };
+                        objSupplier = new SupplierInfo()
+                        {
+                            Id = Convert.ToInt32(objReader["Id"]),
+                            SupplierName = objReader["SupplierName"].ToString(),
+                            ContactNo = objReader["ContactNo"].ToString(),
+                            Email = objReader["Email"].ToString(),
+                            Address = objReader["Address"].ToString()
+                        };
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
             }
             return objSupplier;
         }
@@ -84,15 +125,28 @@ namespace FirstChoiceApp.Gateway
         {
             int affectedRowCount = 0;
 
-            SqlCommand objCommand = new SqlCommand("uspCreateSupplier", objDbConnection.Connection());
-            objCommand.CommandType = CommandType.StoredProcedure;
-            objCommand.Parameters.AddWithValue("SupplierName", objSupplierInfo.SupplierName);
-            objCommand.Parameters.AddWithValue("ContactNo", objSupplierInfo.ContactNo);
-            objCommand.Parameters.AddWithValue("Email", objSupplierInfo.Email);
-            objCommand.Parameters.AddWithValue("Address", objSupplierInfo.Address);
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            affectedRowCount = objCommand.ExecuteNonQuery();
+            try
+            {
+                SqlCommand objCommand = new SqlCommand("uspCreateSupplier", conn);
+                objCommand.CommandType = CommandType.StoredProcedure;
+                objCommand.Parameters.AddWithValue("SupplierName", objSupplierInfo.SupplierName);
+                objCommand.Parameters.AddWithValue("ContactNo", objSupplierInfo.ContactNo);
+                objCommand.Parameters.AddWithValue("Email", objSupplierInfo.Email);
+                objCommand.Parameters.AddWithValue("Address", objSupplierInfo.Address);
 
+                affectedRowCount = objCommand.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
             return affectedRowCount;
         }
 

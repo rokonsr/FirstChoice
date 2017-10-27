@@ -9,7 +9,7 @@ namespace FirstChoiceApp.Models
 
         public int SaleId { get; set; }
 
-        [Display(Name = "Purchase Amount")]
+        [Display(Name = "Sale Amount")]
         public decimal SaleAmount { get; set; }
 
         [Display(Name = "Paid Amount")]
@@ -24,10 +24,10 @@ namespace FirstChoiceApp.Models
         public string Remarks { get; set; }
 
 
-        [Display(Name = "Supplier")]
+        [Display(Name = "Customer")]
         public int CustomerId { get; set; }
 
-        [Display(Name = "Supplier")]
+        [Display(Name = "Customer")]
         public string CustomerName { get; set; }
 
         public string Status { get; set; }

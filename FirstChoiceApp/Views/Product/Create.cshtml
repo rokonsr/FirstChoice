@@ -11,7 +11,7 @@
 
 @using (Html.BeginForm())
 {
-    @*@Html.AntiForgeryToken()*@
+    @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
 
@@ -163,19 +163,19 @@
 
                 // Generate Product Name
 
-                var brandIdT = $("#BrandId option:selected").text() != "--Select Brand--" ? $("#BrandId option:selected").text() + "-" : "";
-                var itemIdT = $("#ItemId option:selected").text() != "--Select Item--" ? $("#ItemId option:selected").text() + "-" : "";
-                var measurementIdT = $("#MeasurementId option:selected").text() != "--Select Measurement--" ? $("#MeasurementId option:selected").text() : "";
-                var sizeIdT = $("#SizeId option:selected").text() != "--Select Product Size--" ? $("#SizeId option:selected").text() : "";
-                var typeIdT = $("#TypeId option:selected").text() != "--Select Product Type--" ? $("#TypeId option:selected").text() : "";
+                var brandIdT = $("#BrandId option:selected").text() != "--Select Brand--" ? $("#BrandId option:selected").text() : "";
+                var itemIdT = $("#ItemId option:selected").text() != "--Select Item--" ? "-" + $("#ItemId option:selected").text() : "";
+                var measurementIdT = $("#MeasurementId option:selected").text() != "--Select Measurement--" ? "-" + $("#MeasurementId option:selected").text() : "";
+                var sizeIdT = $("#SizeId option:selected").text() != "--Select Product Size--" ? "-" + $("#SizeId option:selected").text() : "";
+                var typeIdT = $("#TypeId option:selected").text() != "--Select Product Type--" ? "-" + $("#TypeId option:selected").text() : "";
 
-                var countSizeList = $('#SizeId option').size();
-                var countTypeList = $('#TypeId option').size();
-                var i = countSizeList > 1 ? "-" : "";
-                var s = countTypeList > 1 & sizeId > 0 ? "-" : "";
+                //var countSizeList = $('#SizeId option').size();
+                //var countTypeList = $('#TypeId option').size();
+                //var i = countSizeList > 1 ? "-" : "";
+                //var s = countTypeList > 1 & sizeId > 0 ? "-" : "";
 
                 $('#ProductName').val("");
-                $('#ProductName').val(brandIdT + itemIdT + measurementIdT + i + sizeIdT + s + typeIdT);
+                $('#ProductName').val(brandIdT + itemIdT + measurementIdT + sizeIdT + typeIdT);
             }
         });
 

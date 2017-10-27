@@ -58,5 +58,7 @@ namespace FirstChoiceApp.Models
         [Display(Name = "Product Name")]
         [StringLength(200, ErrorMessage = "Product name should be maximum 200 characters long", MinimumLength = 3)]
         public string ProductName { get; set; }
+
+        public string InvoiceNo { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace FirstChoiceApp.Gateway
 {
     public class CustomerGateway
     {
-        DbConnection objConnection = new DbConnection();
+        private DbConnection strCon = new DbConnection();
 
         internal List<Customer> GetAllCustomer()
         {
@@ -18,23 +18,37 @@ namespace FirstChoiceApp.Gateway
 
             string query = "SELECT * FROM Customer";
 
-            SqlCommand command = new SqlCommand(query, objConnection.Connection());
-            SqlDataReader reader = command.ExecuteReader();
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            if (reader.HasRows)
+            try
             {
-                while (reader.Read())
+                SqlCommand command = new SqlCommand(query, conn);
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
                 {
-                    Customer objCustomer = new Customer()
+                    while (reader.Read())
                     {
-                        Id = Convert.ToInt32(reader["Id"]),
-                        CustomerName = reader["CustomerName"].ToString(),
-                        ContactNo = reader["ContactNo"].ToString(),
-                        Email = reader["Email"].ToString(),
-                        Address = reader["Address"].ToString()
-                    };
-                    objCustomerList.Add(objCustomer);
+                        Customer objCustomer = new Customer()
+                        {
+                            Id = Convert.ToInt32(reader["Id"]),
+                            CustomerName = reader["CustomerName"].ToString(),
+                            ContactNo = reader["ContactNo"].ToString(),
+                            Email = reader["Email"].ToString(),
+                            Address = reader["Address"].ToString()
+                        };
+                        objCustomerList.Add(objCustomer);
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
             }
             return objCustomerList;
         }
@@ -43,16 +57,29 @@ namespace FirstChoiceApp.Gateway
         {
             int countAffectedRow = 0;
 
-            SqlCommand command = new SqlCommand("uspUpdateCustomer", objConnection.Connection());
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("Id", objCustomer.Id);
-            command.Parameters.AddWithValue("CustomerName", objCustomer.CustomerName);
-            command.Parameters.AddWithValue("ContactNo", objCustomer.ContactNo);
-            command.Parameters.AddWithValue("Email", objCustomer.Email);
-            command.Parameters.AddWithValue("Address", objCustomer.Address);
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            countAffectedRow = command.ExecuteNonQuery();
+            try
+            {
+                SqlCommand command = new SqlCommand("uspUpdateCustomer", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("Id", objCustomer.Id);
+                command.Parameters.AddWithValue("CustomerName", objCustomer.CustomerName);
+                command.Parameters.AddWithValue("ContactNo", objCustomer.ContactNo);
+                command.Parameters.AddWithValue("Email", objCustomer.Email);
+                command.Parameters.AddWithValue("Address", objCustomer.Address);
 
+                countAffectedRow = command.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
             return countAffectedRow;
         }
 
@@ -60,15 +87,28 @@ namespace FirstChoiceApp.Gateway
         {
             int countAffectedRow = 0;
 
-            SqlCommand command = new SqlCommand("uspCreateCustomer", objConnection.Connection());
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("CustomerName", objCustomer.CustomerName);
-            command.Parameters.AddWithValue("ContactNo", objCustomer.ContactNo);
-            command.Parameters.AddWithValue("Email", objCustomer.Email);
-            command.Parameters.AddWithValue("Address", objCustomer.Address);
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
 
-            countAffectedRow = command.ExecuteNonQuery();
+            try
+            {
+                SqlCommand command = new SqlCommand("uspCreateCustomer", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("CustomerName", objCustomer.CustomerName);
+                command.Parameters.AddWithValue("ContactNo", objCustomer.ContactNo);
+                command.Parameters.AddWithValue("Email", objCustomer.Email);
+                command.Parameters.AddWithValue("Address", objCustomer.Address);
 
+                countAffectedRow = command.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
             return countAffectedRow;
         }
 

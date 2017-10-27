@@ -1,0 +1,113 @@
+﻿@model PagedList.IPagedList<FirstChoiceApp.Models.SaleLedger>
+@using PagedList.Mvc
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = " Sale Ledger";
+}
+
+<p class="page-title">Sale Ledger Of All Customer</p>
+<hr class="hr-title" />
+<br />
+
+@using (Html.BeginForm())
+{
+    <table>
+        <tr>
+            <td style="padding:5px;"><b>Select Status</b></td>
+            <td style="padding:5px;">
+                @Html.DropDownList("SearchString", new List<SelectListItem>
+                {
+                    new SelectListItem{ Text = "Due", Value = "Due" },
+                    new SelectListItem{ Text = "Advance", Value = "Advance" },
+                    new SelectListItem{ Text = "Close", Value = "Close" }
+                }, new { @class = "ddl-style", @style = "width:150px;" })
+            </td>
+            <td style="padding:5px;">
+                <input type="submit" value="Search" class="btn btn-primary" />
+            </td>
+        </tr>
+    </table>
+}
+
+<br />
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Customer Name", "Ledger", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Sale Amount", "Ledger", new { sortOrder = ViewBag.PurchaseSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Paid Amount", "Ledger", new { sortOrder = ViewBag.PaidSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Balance", "Ledger", new { sortOrder = ViewBag.DueSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        @*<th>
+                @Html.DisplayNameFor(model => model.CreatedDate)
+            </th>*@
+        <th>
+            @Html.ActionLink("Status", "Ledger", new { sortOrder = ViewBag.StatusSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        @*<th>
+                @Html.DisplayNameFor(model => model.Remarks)
+            </th>
+            <th></th>*@
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SaleAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaidAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Balance)
+            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                </td>*@
+            <td>
+                @if (item.Status == "Due")
+                {
+                    <span style="color:red; font-weight:bold">
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </span>
+                }
+                else if (item.Status == "Advance")
+                {
+                    <span style="color:green; font-weight:bold">
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </span>
+                }
+                else
+                {
+                    @Html.DisplayFor(modelItem => item.Status)
+                }
+            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.Remarks)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+                </td>*@
+        </tr>
+    }
+
+</table>
+
+<hr class="hr-title" />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Ledger",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
