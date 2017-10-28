@@ -10,7 +10,7 @@
 
 @using (Html.BeginForm())
 {
-    @*@Html.AntiForgeryToken()*@
+    @Html.AntiForgeryToken()
 
     <div class="form-vertical">
 
@@ -35,7 +35,7 @@
                     @Html.DropDownListFor(model => model.SupplierId, new SelectList(ViewBag.SupplierList, "Id", "SupplierName"), "--Select Supplier--",  new { @class = "ddl-style" })
                 </td>
                 <td>
-                    @Html.Editor("DueAmount", new { htmlAttributes = new { @style = "width:120px;", @class= "DueAmount", @readonly="readonly" } })
+                    @Html.Editor("DueAmount", new { htmlAttributes = new { @style = "width:120px;", @class= "DueAmount", @readonly="readonly", Value="0" } })
                 </td>
                 <td>
                     @Html.EditorFor(model => model.InvoiceNo, new { htmlAttributes = new { @style = "width:120px;" } })
@@ -245,6 +245,9 @@
 
                 $("#TotalAmount").val();
 
+                $("#PaidAmount").val(0);
+                $("#DiscountAmount").val(0);
+
                 $("#ViewPurchaseDetail").empty();
                 $.ajax({
                     type: "POST",
@@ -341,17 +344,34 @@
                 $('#SaleRate').val("");
                 $('#TotalPrice').val("");
 
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("GetProductById", "Purchase")',
-                    contentType: "application/json; charset=utf-8",
-                    data: JSON.stringify({ productId: productId }),
+                if ($("#PurchaseType").val() == 2) {
+                    var invoiceNo = $("#InvoiceNo").val();
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetProductByIdInvoice", "Purchase")',
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify({ productId: productId, invoiceNo: invoiceNo }),
 
-                    success: function (objProduct) {
-                        $("#ProductCode").val(objProduct.ProductCode);
-                        $("#SaleRate").val(objProduct.Price);
-                    },
-                });
+                        success: function (objProduct) {
+                            $("#ProductCode").val(objProduct.ProductCode);
+                            $("#SaleRate").val(objProduct.Price);
+                            $("#Quantity").val(objProduct.Stock);
+                            $("#PurchaseRate").val(objProduct.PurchasePrice);
+                        },
+                    });
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetProductById", "Purchase")',
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify({ productId: productId }),
+
+                        success: function (objProduct) {
+                            $("#ProductCode").val(objProduct.ProductCode);
+                            $("#SaleRate").val(objProduct.Price);
+                        },
+                    });
+                };
             });
 
             $("#ProductCode").change(function() {
@@ -363,17 +383,34 @@
                 $('#SaleRate').val("");
                 $('#TotalPrice').val("");
 
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("GetProductByCode", "Purchase")',
-                    contentType: "application/json; charset=utf-8",
-                    data: JSON.stringify({ productCode: productCode }),
+                if ($("#PurchaseType").val() == 2) {
+                    var invoiceNo = $("#InvoiceNo").val();
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetProductByCodeInvoice", "Purchase")',
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify({ productCode: productCode, invoiceNo: invoiceNo }),
 
-                    success: function (objProduct) {
-                        $("#ProductId").val(objProduct.Id);
-                        $("#SaleRate").val(objProduct.Price);
-                    },
-                });
+                        success: function (objProduct) {
+                            $("#ProductId").val(objProduct.Id);
+                            $("#SaleRate").val(objProduct.Price);
+                            $("#Quantity").val(objProduct.Stock);
+                            $("#PurchaseRate").val(objProduct.PurchasePrice);
+                        },
+                    });
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetProductByCode", "Purchase")',
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify({ productCode: productCode }),
+
+                        success: function (objProduct) {
+                            $("#ProductId").val(objProduct.Id);
+                            $("#SaleRate").val(objProduct.Price);
+                        },
+                    });
+                };
             });
 
             //Total Price Calculation In Purchase Details

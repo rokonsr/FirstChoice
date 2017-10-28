@@ -28,13 +28,17 @@
                         <div class="navbar-collapse collapse">
                             <ul class="nav navbar-nav">
                                 <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                                @*<li class="dropdown">
+                                <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Basic Setup <span class="caret"></span></a>
                                     <ul class="dropdown-menu" role="menu">
-                                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
                                         <li>@Html.ActionLink("Company", "Index", "Company")</li>
                                         <li>@Html.ActionLink("Supplier", "Index", "Supplier")</li>
-                                        <li>@Html.ActionLink("Customer", "Index", "Customer")</li>
+                                        <li>@Html.ActionLink("Customer", "Index", "Customer")</li>   
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Product Setup<span class="caret"></span></a>
+                                    <ul class="dropdown-menu" role="menu">
                                         <li>@Html.ActionLink("Category", "Index", "Category")</li>
                                         <li>@Html.ActionLink("Brand", "Index", "Brand")</li>
                                         <li>@Html.ActionLink("Measurement", "Index", "Measurement")</li>
@@ -42,11 +46,24 @@
                                         <li>@Html.ActionLink("Item", "Index", "Item")</li>
                                         <li>@Html.ActionLink("Product Type", "Index", "ProductType")</li>
                                         <li>@Html.ActionLink("Product", "Index", "Product")</li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Purchase<span class="caret"></span></a>
+                                    <ul class="dropdown-menu" role="menu">
                                         <li>@Html.ActionLink("Purchase", "Create", "Purchase")</li>
                                         <li>@Html.ActionLink("Ledger", "Ledger", "Purchase")</li>
                                         <li>@Html.ActionLink("Payment", "Payment", "Purchase")</li>
                                     </ul>
-                                </li>*@
+                                </li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Sales<span class="caret"></span></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>@Html.ActionLink("Sale", "Create", "Sale")</li>
+                                        <li>@Html.ActionLink("Ledger", "Ledger", "Sale")</li>
+                                        <li>@Html.ActionLink("Payment", "Payment", "Sale")</li>
+                                    </ul>
+                                </li>
                             </ul>
                         </div>
                     </td>
@@ -65,21 +82,11 @@
         <div class="col-md-3">
             <nav class="navbar navbar-default">
                 <ul class="nav navbar-default">
-                    <li>@Html.ActionLink("Category", "Index", "Category")</li>
-                    <li>@Html.ActionLink("Brand", "Index", "Brand")</li>
-                    <li>@Html.ActionLink("Item", "Index", "Item")</li>
-                    <li>@Html.ActionLink("Measurement", "Index", "Measurement")</li>
-                    <li>@Html.ActionLink("Size", "Index", "Size")</li>
-                    <li>@Html.ActionLink("Product Type", "Index", "ProductType")</li>
                     <li>@Html.ActionLink("Product", "Index", "Product")</li>
-
-                    @*<li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Company", "Index", "Company")</li>
-                    <li>@Html.ActionLink("Supplier", "Index", "Supplier")</li>
-                    <li>@Html.ActionLink("Customer", "Index", "Customer")</li>
-                    <li>@Html.ActionLink("Purchase", "Create", "Purchase")</li>
-                    <li>@Html.ActionLink("Ledger", "Ledger", "Purchase")</li>
-                    <li>@Html.ActionLink("Payment", "Payment", "Purchase")</li>*@
+                    <li>@Html.ActionLink("Sale", "Create", "Sale")</li>
+                    <li>@Html.ActionLink("Ledger", "Ledger", "Sale")</li>
+                    <li>@Html.ActionLink("Payment", "Payment", "Sale")</li>
+                    <li>@Html.ActionLink("Expense Summary", "Index", "Expense")</li>
                 </ul>
             </nav>
         </div>

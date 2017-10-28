@@ -140,3 +140,4 @@ D:\FirstChoiceApp\FirstChoiceApp\bin\Microsoft.AI.Web.xml
 D:\FirstChoiceApp\FirstChoiceApp\obj\Release\FirstChoiceApp.csproj.CoreCompileInputs.cache
 D:\FirstChoiceApp\FirstChoiceApp\obj\Release\FirstChoiceApp.dll
 D:\FirstChoiceApp\FirstChoiceApp\obj\Release\FirstChoiceApp.pdb
+D:\FirstChoiceApp\FirstChoiceApp\obj\Release\FirstChoiceApp.csprojResolveAssemblyReference.cache

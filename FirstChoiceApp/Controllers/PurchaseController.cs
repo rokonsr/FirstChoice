@@ -157,6 +157,25 @@ namespace FirstChoiceApp.Controllers
         }
 
         [HttpPost]
+        public JsonResult GetProductByIdInvoice(int productId, string invoiceNo)
+        {
+            PurchaseManager objPurchaseManager = new PurchaseManager();
+
+            Product objProduct = new Product();
+            List<Product> objProductList = objPurchaseManager.GetAllProductByInvoice(productId, invoiceNo);
+
+            foreach (var item in objProductList)
+            {
+                objProduct.ProductCode = item.ProductCode;
+                objProduct.Price = item.Price;
+                objProduct.PurchasePrice = item.PurchasePrice;
+                objProduct.Stock = item.Stock;
+            }
+
+            return Json(objProduct, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
         public JsonResult GetProductByCode(string productCode)
         {
             ProductManager objProductManager = new ProductManager();
@@ -168,6 +187,25 @@ namespace FirstChoiceApp.Controllers
             {
                 objProduct.Id = item.Id;
                 objProduct.Price = item.Price;
+            }
+
+            return Json(objProduct, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult GetProductByCodeInvoice(string productCode, string invoiceNo)
+        {
+            PurchaseManager objPurchaseManager = new PurchaseManager();
+
+            Product objProduct = new Product();
+            List<Product> objProductList = objPurchaseManager.GetAllProductByCodeInvoice(productCode, invoiceNo);
+
+            foreach (var item in objProductList)
+            {
+                objProduct.Id = item.Id;
+                objProduct.Price = item.Price;
+                objProduct.PurchasePrice = item.PurchasePrice;
+                objProduct.Stock = item.Stock;
             }
 
             return Json(objProduct, JsonRequestBehavior.AllowGet);

@@ -42,6 +42,94 @@ namespace FirstChoiceApp.Gateway
             return countAffectedRow;
         }
 
+        internal List<Product> GetAllProductByInvoice(int productId, string invoiceNo)
+        {
+            List<Product> objProductList = new List<Product>();
+
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
+
+            try
+            {
+                SqlCommand command = new SqlCommand("uspGetAllProductByInvoicePr", conn);
+                command.Parameters.AddWithValue("ProductId", productId);
+                command.Parameters.AddWithValue("InvoiceNo", invoiceNo);
+                command.CommandType = CommandType.StoredProcedure;
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        Product objProduct = new Product()
+                        {
+                            Id = Convert.ToInt32(reader["Id"]),
+                            ProductName = reader["ProductName"].ToString(),
+                            Stock = Convert.ToDecimal(reader["Quantity"]),
+                            Price = Convert.ToDecimal(reader["Price"]),
+                            PurchasePrice = Convert.ToDecimal(reader["PurchasePrice"]),
+                            InvoiceNo = reader["InvoiceNo"].ToString(),
+                            ProductCode = reader["ProductCode"].ToString()
+                        };
+                        objProductList.Add(objProduct);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return objProductList;
+        }
+
+        internal List<Product> GetAllProductByCodeInvoice(string productCode, string invoiceNo)
+        {
+            List<Product> objProductList = new List<Product>();
+
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
+
+            try
+            {
+                SqlCommand command = new SqlCommand("uspGetAllProductByCodeInvoicePr", conn);
+                command.Parameters.AddWithValue("ProductCode", productCode);
+                command.Parameters.AddWithValue("InvoiceNo", invoiceNo);
+                command.CommandType = CommandType.StoredProcedure;
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        Product objProduct = new Product()
+                        {
+                            Id = Convert.ToInt32(reader["Id"]),
+                            ProductName = reader["ProductName"].ToString(),
+                            Stock = Convert.ToDecimal(reader["Quantity"]),
+                            Price = Convert.ToDecimal(reader["Price"]),
+                            PurchasePrice = Convert.ToDecimal(reader["PurchasePrice"]),
+                            InvoiceNo = reader["InvoiceNo"].ToString(),
+                            ProductCode = reader["ProductCode"].ToString()
+                        };
+                        objProductList.Add(objProduct);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return objProductList;
+        }
+
         internal List<Product> GetProductByInvoiceNo(string invoiceNo)
         {
             List<Product> objProductList = new List<Product>();

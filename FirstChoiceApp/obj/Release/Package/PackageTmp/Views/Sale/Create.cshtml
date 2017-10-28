@@ -1,10 +1,19 @@
-﻿@model FirstChoiceApp.Models.Purchase
+﻿@model FirstChoiceApp.Models.Sale
 
 @{
     ViewBag.Title = "Create";
 }
 
-<p class="page-title">Purchase Product</p>
+<style>
+    .stock{
+        font-weight:bolder;
+        color:red;
+        background-color:white;
+        text-align:center;
+    }
+</style>
+
+<p class="page-title">Sale Product</p>
 <hr class="hr-title" />
 <br />
 
@@ -17,46 +26,43 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <table>
             <tr style="font-weight:bold;">
-                <td>Purchase Type</td>
-                <td>Supplier Name</td>
+                <td>Sale Type</td>
+                <td>Customer Name</td>
                 <td>Due Amount</td>
-                <td>InvoiceNo</td>
-                <td>Purchase Date</td>
+                <td>Invoice No.</td>
+                <td>Sale Date</td>
             </tr>
             <tr>
                 <td>
-                    @Html.DropDownListFor(model => model.PurchaseType, new List<SelectListItem>
+                    @Html.DropDownListFor(model => model.SaleType, new List<SelectListItem>
                         {
-                          new SelectListItem{ Text = "Purchase", Value = "1" },
-                          new SelectListItem{ Text = "Return Purchase", Value = "2" }
+                          new SelectListItem{ Text = "Sale", Value = "1" },
+                          new SelectListItem{ Text = "Return Sale", Value = "2" }
                         }, new { @class = "ddl-style", @style = "width:150px;" })
                 </td>
                 <td>
-                    @Html.DropDownListFor(model => model.SupplierId, new SelectList(ViewBag.SupplierList, "Id", "SupplierName"), "--Select Supplier--",  new { @class = "ddl-style" })
+                    @Html.DropDownListFor(model => model.CustomerId, new SelectList(ViewBag.CustomerList, "Id", "CustomerName"), "--Select Customer--", new { @class = "ddl-style" })
                 </td>
                 <td>
-                    @Html.Editor("DueAmount", new { htmlAttributes = new { @style = "width:120px;", @class= "DueAmount", @readonly="readonly", Value="0" } })
+                    @Html.Editor("DueAmount", new { htmlAttributes = new { @style = "width:120px;", @class = "DueAmount", @readonly = "readonly" } })
                 </td>
                 <td>
-                    @Html.EditorFor(model => model.InvoiceNo, new { htmlAttributes = new { @style = "width:120px;" } })
+                    @Html.EditorFor(model => model.InvoiceNo, new { htmlAttributes = new { @style = "width:120px;", @disabled = "true" } })
                 </td>
                 <td>
-                    @Html.EditorFor(model => model.PurchaseDate, new { htmlAttributes = new { @style = "width:150px;", @class= "datePicker" } })
+                    @Html.EditorFor(model => model.SaleDate, new { htmlAttributes = new { @style = "width:150px;", @class = "datePicker", @Value = DateTime.Now.ToString("d MMM, yyyy") } })
                 </td>
             </tr>
             <tr>
                 <td>
-                    @Html.ValidationMessageFor(model => model.PurchaseType, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.SaleType, "", new { @class = "text-danger" })
                 </td>
                 <td>
-                    @Html.ValidationMessageFor(model => model.SupplierId, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
                 </td>
                 <td></td>
                 <td>
-                    @Html.ValidationMessageFor(model => model.InvoiceNo, "", new { @class = "text-danger" })
-                </td>
-                <td>
-                    @Html.ValidationMessageFor(model => model.PurchaseDate, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.SaleDate, "", new { @class = "text-danger" })
                 </td>
             </tr>
         </table>
@@ -67,7 +73,6 @@
                 <td>Discount</td>
                 <td>Current Due</td>
                 <td>Total Due</td>
-                @*<td>Grand Total</td>*@
                 <td></td>
             </tr>
             <tr>
@@ -86,9 +91,6 @@
                 <td>
                     @Html.Editor("TotalDue", new { htmlAttributes = new { @style = "width:120px;", @readonly = "readonly" } })
                 </td>
-                @*<td>
-                    @Html.Editor("GrandTotal", new { htmlAttributes = new { @style = "width:120px;" } })
-                </td>*@
                 <td>
                     <input type="submit" value="Create" class="btn btn-primary" />
                 </td>
@@ -97,12 +99,8 @@
                 <td>
                     @Html.ValidationMessageFor(model => model.TotalAmount, "", new { @class = "text-danger" })
                 </td>
-                <td>
-                    
-                </td>
-                <td>
-                    
-                </td>
+                <td></td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -118,64 +116,62 @@
 <hr style="background-color:green; height:2px; margin:10px 0;" />
 
 
-    <table>
-        <tr style="font-weight:bold;">
-            <td>Product Name</td>
-            <td>Product Code</td>
-            <td>Quantity</td>
-            <td>Purchase Price</td>
-            <td>Sale Price</td>
-            <td>Total Price</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>
-                @Html.DropDownList("ProductId", new SelectList(ViewBag.ProductList, "Id", "ProductName"), "--Select Product--", new { @style="width:220px; height:26px;" })
-            </td>
-            <td>
-                @Html.TextBox("ProductCode", "", new { @style="width:100px;" })
-            </td>
-            <td>
-                @Html.TextBox("Quantity", "", new { @style = "width:100px;" })
-            </td>
-            <td>
-                @Html.TextBox("PurchaseRate", "", new { @style = "width:100px;" })
-            </td>
-            <td>
-                @Html.TextBox("SaleRate", "", new { @style = "width:100px;" })
-            </td>
-            <td>
-                @Html.TextBox("TotalPrice", "", new { @style = "width:100px;", @readonly="readonly" })
-            </td>
-            <td>
-                <input type="button" id="btnSubmit" value="Add" />
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td>
-                <label id="errorQuantity" class="field-validation-error"></label>
-            </td>
-            <td>
-                <label id="errorRate" class="field-validation-error"></label>
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-    </table>
+<table>
+    <tr style="font-weight:bold;">
+        <td>Product Name</td>
+        <td>Product Code</td>
+        <td>Stock</td>
+        <td>Quantity</td>
+        <td>Sale Price</td>
+        <td>Total Price</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>
+            @Html.DropDownList("ProductId", new SelectList(ViewBag.ProductList, "Id", "ProductName"), "--Select Product--", new { @style = "width:220px; height:26px;" })
+        </td>
+        <td>
+            @Html.TextBox("ProductCode", "", new { @style = "width:100px;" })
+        </td>
+        <td>
+            @Html.TextBox("Stock", "", new { @style = "width:100px;", @disabled = "true", @class = "stock" })
+        </td>
+        <td>
+            @Html.TextBox("Quantity", "", new { @style = "width:100px;" })
+        </td>
+        <td>
+            @Html.TextBox("SaleRate", "", new { @style = "width:100px;" })
+        </td>
+        <td>
+            @Html.TextBox("TotalPrice", "", new { @style = "width:100px;", @readonly = "readonly" })
+        </td>
+        <td>
+            <input type="button" id="btnSubmit" value="Add" />
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+            <label id="errorQuantity" class="field-validation-error"></label>
+        </td>
+        <td>
+            <label id="errorSaleRate" class="field-validation-error"></label>
+        </td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
 
-<table style="width: 80%" id="ViewPurchaseDetail" class="table table-striped">
+<table style="width: 80%" id="ViewSaleDetail" class="table table-striped">
     <tr style="background-color: #e9e9e9; height:30px;">
         <th>Product</th>
         <th>Quantity</th>
-        <th>Purchase Price</th>
         <th>Sale Price</th>
         <th>Total Price</th>
     </tr>
     <tr>
-        <td></td>
         <td></td>
         <td></td>
         <td></td>
@@ -198,14 +194,14 @@
 
 
             $("#InvoiceNo").change(function () {
-                if ($("#PurchaseType").val() == 2) {
+                $('#ProductId').empty();
+                if ($("#SaleType").val() == 2) {
                     var invoiceNo = $("#InvoiceNo").val();
-                    $('#ProductId').empty();
                     $("#ProductId").append('<option value="">' + "--Select Product--" + '</option>');
 
                     $.ajax({
                         type: "POST",
-                        url: '@Url.Action("GetProduct", "Purchase")',
+                        url: '@Url.Action("GetProduct", "Sale")',
                         contentType: "application/json; charset=utf-8",
                         data: JSON.stringify({ invoiceNo: invoiceNo }),
 
@@ -221,7 +217,7 @@
             });
 
             $("#errorQuantity").hide();
-            $("#errorRate").hide();
+            $("#errorSaleRate").hide();
 
             $("#btnSubmit").on("click", function () {
                 var productId = $("#ProductId").val();
@@ -238,48 +234,46 @@
                     $("#errorQuantity").text("Required");
                 }
 
-                if (purchaseRate == "") {
-                    $("#errorRate").show();
-                    $("#errorRate").text("Required");
+                if (saleRate == "") {
+                    $("#errorSaleRate").show();
+                    $("#errorSaleRate").text("Required");
                 }
 
                 $("#TotalAmount").val();
 
-                $("#PaidAmount").val(0);
-                $("#DiscountAmount").val(0);
-
-                $("#ViewPurchaseDetail").empty();
+                $("#ViewSaleDetail").empty();
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("PurchaseDetails", "Purchase")',
+                    url: '@Url.Action("SaleDetails", "Sale")',
                     contentType: "application/json; charset=utf-8",
-                    data: JSON.stringify({ productId: productId, quantity: quantity, purchaseRate: purchaseRate, saleRate: saleRate, productName: productName }),
+                    data: JSON.stringify({ productId: productId, quantity: quantity, saleRate: saleRate, productName: productName }),
 
-                    success: function (purchaseDetail) {
-                        $("#ViewPurchaseDetail").append('<tr style="background-color: #e9e9e9; height:30px; "><th>Product</th><th>Quantity</th><th>Purchase Price</th><th>Sale Price</th><th>Product Total</th></tr>');
+                    success: function (saleDetail) {
+                        $("#ViewSaleDetail").append('<tr style="background-color: #e9e9e9; height:30px; "><th>Product</th><th>Quantity</th><th>Sale Price</th><th>Product Total</th></tr>');
 
-                        $("#TotalAmount").val(purchaseDetail.totalAmount);
+                        $("#TotalAmount").val(saleDetail.totalAmount);
                         $("#CurrentDue").val(CurrentDue());
                         $("#TotalDue").val(TotalDue());
+                        $("#PaidAmount").val(0);
 
-                        $.each(purchaseDetail.list, function (key, value) {
-                            $("#ViewPurchaseDetail").append('<tr><td>' + value.ProductName + '</td><td>' + value.Quantity + '</td><td>' + value.PurchaseRate + '</td><td>' + value.SaleRate + '</td><td>' + value.Quantity * value.PurchaseRate + '</td></tr>');
+                        $.each(saleDetail.list, function (key, value) {
+                            $("#ViewSaleDetail").append('<tr><td>' + value.ProductName + '</td><td>' + value.Quantity + '</td><td>' + value.SaleRate + '</td><td>' + value.Quantity * value.SaleRate + '</td></tr>');
                         });
                     },
-                    error: function (purchaseDetail) {
-                        $("#ViewPurchaseDetail").append('<tr style="background-color: #e9e9e9; height:30px; "><th>Product</th><th>Quantity</th><th>Purchase Price</th><th>Sale Price</th><th>Product Total</th></tr>');
+                    error: function (saleDetail) {
+                        $("#ViewSaleDetail").append('<tr style="background-color: #e9e9e9; height:30px; "><th>Product</th><th>Quantity</th><th>Sale Price</th><th>Product Total</th></tr>');
                     },
                 });
             });
 
             $("#InvoiceNo").autocomplete({
                 source: function (request, response) {
-                    if ($("#PurchaseType").val() == 2) {
+                    if ($("#SaleType").val() == 2) {
                         $.ajax({
-                            url: '@Url.Action("AutoComplete", "Purchase")',
+                            url: '@Url.Action("AutoComplete", "Sale")',
                             type: "POST",
                             dataType: "json",
-                            data: { Prefix: request.term, supplierId: $("#SupplierId").val() },
+                            data: { Prefix: request.term, customerId: $("#CustomerId").val() },
                             success: function (data) {
                                 response($.map(data, function (item) {
                                     return { label: item.InvoiceNo, value: item.InvoiceNo };
@@ -293,20 +287,28 @@
                 }
             });
 
-            $("#PurchaseType").change(function () {
-                if ($("#PurchaseType").val() == 2) {
+            $("#SaleType").change(function () {
+                if ($("#SaleType").val() == 2) {
                     $("#PaidAmount").val(0);
                     $("#DiscountAmount").val(0);
                 }
             });
 
-            $("#SupplierId").change(function() {
-                var supplierId = $("#SupplierId").val();
+            $("#SaleType").change(function () {
+                if ($("#SaleType").val() == 1) {
+                    $("#InvoiceNo").attr('disabled', true);
+                } else if ($("#SaleType").val() == 2) {
+                    $("#InvoiceNo").attr('disabled', false);
+                }
+            });
+
+            $("#CustomerId").change(function() {
+                var customerId = $("#CustomerId").val();
                 var purchaseType = $("#PurchaseType").val();
 
                 $("#DiscountAmount").val(0);
 
-                if (supplierId == 0) {
+                if (customerId == 0) {
                     $("#DueAmount").val(0);
 
                     $("#CurrentDue").val(CurrentDue());
@@ -315,9 +317,9 @@
 
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("GetSupplierDue", "Purchase")',
+                    url: '@Url.Action("GetCustomerDue", "Sale")',
                     contentType: "application/json; charset=utf-8",
-                    data: JSON.stringify({ supplierId: supplierId }),
+                    data: JSON.stringify({ customerId: customerId }),
 
                     success: function (supplierDue) {
                         $("#DueAmount").val(supplierDue);
@@ -328,7 +330,7 @@
                 });
             });
 
-            if ($("#SupplierId").val() == 0) {
+            if ($("#CustomerId").val() == 0) {
                 $("#DueAmount").val(0);
 
                 $("#CurrentDue").val(CurrentDue());
@@ -344,30 +346,30 @@
                 $('#SaleRate').val("");
                 $('#TotalPrice').val("");
 
-                if ($("#PurchaseType").val() == 2) {
+                if ($("#SaleType").val() == 2) {
                     var invoiceNo = $("#InvoiceNo").val();
                     $.ajax({
                         type: "POST",
-                        url: '@Url.Action("GetProductByIdInvoice", "Purchase")',
+                        url: '@Url.Action("GetProductByIdInvoice", "Sale")',
                         contentType: "application/json; charset=utf-8",
                         data: JSON.stringify({ productId: productId, invoiceNo: invoiceNo }),
 
                         success: function (objProduct) {
                             $("#ProductCode").val(objProduct.ProductCode);
+                            $("#Stock").val(objProduct.Stock);
                             $("#SaleRate").val(objProduct.Price);
-                            $("#Quantity").val(objProduct.Stock);
-                            $("#PurchaseRate").val(objProduct.PurchasePrice);
                         },
                     });
                 } else {
                     $.ajax({
                         type: "POST",
-                        url: '@Url.Action("GetProductById", "Purchase")',
+                        url: '@Url.Action("GetProductById", "Sale")',
                         contentType: "application/json; charset=utf-8",
                         data: JSON.stringify({ productId: productId }),
 
                         success: function (objProduct) {
                             $("#ProductCode").val(objProduct.ProductCode);
+                            $("#Stock").val(objProduct.Stock);
                             $("#SaleRate").val(objProduct.Price);
                         },
                     });
@@ -383,49 +385,71 @@
                 $('#SaleRate').val("");
                 $('#TotalPrice').val("");
 
-                if ($("#PurchaseType").val() == 2) {
+                if ($("#SaleType").val() == 2) {
                     var invoiceNo = $("#InvoiceNo").val();
+
                     $.ajax({
                         type: "POST",
-                        url: '@Url.Action("GetProductByCodeInvoice", "Purchase")',
+                        url: '@Url.Action("GetProductByCodeInvoice", "Sale")',
                         contentType: "application/json; charset=utf-8",
                         data: JSON.stringify({ productCode: productCode, invoiceNo: invoiceNo }),
 
                         success: function (objProduct) {
                             $("#ProductId").val(objProduct.Id);
+                            $("#Stock").val(objProduct.Stock);
                             $("#SaleRate").val(objProduct.Price);
-                            $("#Quantity").val(objProduct.Stock);
-                            $("#PurchaseRate").val(objProduct.PurchasePrice);
                         },
                     });
                 } else {
                     $.ajax({
                         type: "POST",
-                        url: '@Url.Action("GetProductByCode", "Purchase")',
+                        url: '@Url.Action("GetProductByCode", "Sale")',
                         contentType: "application/json; charset=utf-8",
                         data: JSON.stringify({ productCode: productCode }),
 
                         success: function (objProduct) {
                             $("#ProductId").val(objProduct.Id);
+                            $("#Stock").val(objProduct.Stock);
                             $("#SaleRate").val(objProduct.Price);
                         },
                     });
                 };
             });
 
+            $("#Quantity").change(function () {
+                var stock = parseFloat($("input[name='Stock']").val());
+                var quantity = parseFloat($("input[name='Quantity']").val());
+
+                if (quantity > stock) {
+                    $("#Quantity").val(0);
+                    alert("Quantity is more than Stock!");
+                }
+            });
+
+            $("#SaleRate").change(function () {
+                var purchaseRate = parseFloat($("input[name='PurchaseRate']").val());
+                var saleRate = parseFloat($("input[name='SaleRate']").val());
+
+                if (purchaseRate > saleRate) {
+                    alert("Invalid Sale Rate");
+                }
+            });
+
             //Total Price Calculation In Purchase Details
+            $("#PurchaseRate").attr('disabled', true);
+
             $("#Quantity").keyup(function () {
                     $("#TotalPrice").val(TotalPrice());
             });
 
-            $("#PurchaseRate").keyup(function () {
+            $("#SaleRate").keyup(function () {
                     $("#TotalPrice").val(TotalPrice());
             });
 
             function TotalPrice() {
                 var quantity = $("#Quantity").val();
-                var purchasePrice = $("#PurchaseRate").val();
-                return quantity * purchasePrice;
+                var salePrice = $("#SaleRate").val();
+                return quantity * salePrice;
             }
 
             //Current Due Calculation
@@ -465,3 +489,4 @@
 
     </script>
 }
+

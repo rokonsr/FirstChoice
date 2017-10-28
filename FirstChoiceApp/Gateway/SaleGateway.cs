@@ -42,7 +42,50 @@ namespace FirstChoiceApp.Gateway
             return countAffectedRow;
         }
 
-        internal List<Product> GetAllProductByInvoice()
+        internal List<Product> GetAllProductByCodeInvoice(string productCode, string invoiceNo)
+        {
+            List<Product> objProductList = new List<Product>();
+
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
+
+            try
+            {
+                SqlCommand command = new SqlCommand("uspGetAllProductByCodeInvoice", conn);
+                command.Parameters.AddWithValue("ProductCode", productCode);
+                command.Parameters.AddWithValue("InvoiceNo", invoiceNo);
+                command.CommandType = CommandType.StoredProcedure;
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        Product objProduct = new Product()
+                        {
+                            Id = Convert.ToInt32(reader["Id"]),
+                            ProductName = reader["ProductName"].ToString(),
+                            Stock = Convert.ToDecimal(reader["Quantity"]),
+                            Price = Convert.ToDecimal(reader["Price"]),
+                            InvoiceNo = reader["InvoiceNo"].ToString(),
+                            ProductCode = reader["ProductCode"].ToString()
+                        };
+                        objProductList.Add(objProduct);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return objProductList;
+        }
+
+        internal List<Product> GetAllProductByIdInvoice(int productId, string invoiceNo)
         {
             List<Product> objProductList = new List<Product>();
 
@@ -52,6 +95,8 @@ namespace FirstChoiceApp.Gateway
             try
             {
                 SqlCommand command = new SqlCommand("uspGetAllProductByInvoice", conn);
+                command.Parameters.AddWithValue("ProductId", productId);
+                command.Parameters.AddWithValue("InvoiceNo", invoiceNo);
                 command.CommandType = CommandType.StoredProcedure;
                 SqlDataReader reader = command.ExecuteReader();
 

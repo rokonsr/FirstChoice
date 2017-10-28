@@ -43,5 +43,15 @@ namespace FirstChoiceApp.Manager
         {
             return objPurchaseGateway.Payment(purchaseLedger) > 0;
         }
+
+        internal List<Product> GetAllProductByInvoice(int productCode, string invoiceNo)
+        {
+            return objPurchaseGateway.GetAllProductByInvoice(productCode, invoiceNo);
+        }
+
+        internal List<Product> GetAllProductByCodeInvoice(string productCode, string invoiceNo)
+        {
+            return objPurchaseGateway.GetAllProductByCodeInvoice(productCode, invoiceNo);
+        }
     }
 }

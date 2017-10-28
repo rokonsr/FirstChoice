@@ -60,5 +60,7 @@ namespace FirstChoiceApp.Models
         public string ProductName { get; set; }
 
         public string InvoiceNo { get; set; }
+        public decimal PurchasePrice { get; set; }
+        public decimal SalePrice { get; set; }
     }
 }

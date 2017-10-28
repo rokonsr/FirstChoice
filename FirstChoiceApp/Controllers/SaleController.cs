@@ -163,12 +163,12 @@ namespace FirstChoiceApp.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetProductByIdInvoice(int? productId, string invoiceNo)
+        public JsonResult GetProductByIdInvoice(int productId, string invoiceNo)
         {
             SaleManager objSaleManager = new SaleManager();
 
             Product objProduct = new Product();
-            List<Product> objProductList = objSaleManager.GetAllProductByInvoice().Where(x => x.Id == productId && x.InvoiceNo.Equals(invoiceNo)).ToList();
+            List<Product> objProductList = objSaleManager.GetAllProductByIdInvoice(productId, invoiceNo);
 
             foreach (var item in objProductList)
             {
@@ -204,7 +204,7 @@ namespace FirstChoiceApp.Controllers
             SaleManager objSaleManager = new SaleManager();
 
             Product objProduct = new Product();
-            List<Product> objProductList = objSaleManager.GetAllProductByInvoice().Where(x => x.ProductCode == productCode && x.InvoiceNo.Equals(invoiceNo)).ToList();
+            List<Product> objProductList = objSaleManager.GetAllProductByCodeInvoice(productCode, invoiceNo);
 
             foreach (var item in objProductList)
             {
