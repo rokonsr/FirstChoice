@@ -12,7 +12,6 @@ namespace FirstChoiceApp.Manager
 
         internal bool CreateExpenseType(ExpenseType expenseType)
         {
-
             if (objExpenseGateway.IsExist(expenseType))
             {
                 throw new Exception("Expense type already exist");
@@ -28,6 +27,21 @@ namespace FirstChoiceApp.Manager
         internal List<ExpenseType> GetAllExpenseTypeList(int? id)
         {
             return objExpenseGateway.GetAllExpenseType();
+        }
+
+        internal bool UpdateExpenseType(ExpenseType expenseType)
+        {
+            return objExpenseGateway.UpdateExpenseType(expenseType) > 0;
+        }
+
+        internal bool CreateExpenseDetail(ExpenseDetail expenseDetail)
+        {
+            return objExpenseGateway.CreateExpenseDetail(expenseDetail) > 0;
+        }
+
+        internal List<ExpenseDetail> GetAllExpenseDetail()
+        {
+            return objExpenseGateway.GetAllExpenseDetail();
         }
     }
 }

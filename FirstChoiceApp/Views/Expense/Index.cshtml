@@ -1,4 +1,6 @@
-﻿@model IEnumerable<FirstChoiceApp.Models.ExpenseType>
+﻿@model PagedList.IPagedList<FirstChoiceApp.Models.ExpenseType>
+@using PagedList.Mvc
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
     ViewBag.Title = "Index";
@@ -23,10 +25,10 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.ExpenseTitle)
+            @Html.ActionLink("Expense Title", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Remarks)
+            @Html.ActionLink("Remarks", "Index", new { sortOrder = ViewBag.RemarkSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th></th>
     </tr>
@@ -48,3 +50,8 @@
 }
 
 </table>
+<hr class="hr-title" />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

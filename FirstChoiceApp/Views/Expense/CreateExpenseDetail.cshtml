@@ -1,0 +1,87 @@
+﻿@model FirstChoiceApp.Models.ExpenseDetail
+
+@{
+    ViewBag.Title = "CreateExpenseDetail";
+}
+
+<p class="page-title">Create Expense Detail</p>
+<hr class="hr-title" />
+<br />
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>ExpenseDetail</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.ExpenseTypeId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.ExpenseTypeId, new SelectList(ViewBag.ExpenseType, "Id", "ExpenseTitle"), "--Select Expense Title--", new { @class = "ddl-style" })
+                @Html.ValidationMessageFor(model => model.ExpenseTypeId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ExpenseAmount, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ExpenseAmount)
+                @Html.ValidationMessageFor(model => model.ExpenseAmount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ExpenseDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ExpenseDate, new { htmlAttributes = new { @class = "datePicker" } })
+                @Html.ValidationMessageFor(model => model.ExpenseDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Remarks, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Remarks, 3, 33, null)
+                @Html.ValidationMessageFor(model => model.Remarks, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <span style="color: green; font-weight: bold;">@ViewBag.Success</span>
+                <span style="color: red; font-weight: bold;">@ViewBag.Error</span>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-ui.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $(function () {
+                $(".datePicker").datepicker({ dateFormat: 'd M, yy', type: Text });
+            });
+
+            $("#PaidAmount").keyup(function () {
+                Balance();
+            });
+        });
+
+    </script>
+}
