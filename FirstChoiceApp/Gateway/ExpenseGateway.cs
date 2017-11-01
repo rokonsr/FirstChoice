@@ -49,6 +49,32 @@ namespace FirstChoiceApp.Gateway
             return objExpenseType;
         }
 
+        internal int UpdateExpenseDetail(ExpenseDetail expenseDetail)
+        {
+            int countAffectedRow = 0;
+
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
+
+            try
+            {
+                string strSql = "UPDATE ExpenseDetail SET ExpenseTypeId = '" + expenseDetail.ExpenseTypeId + "', ExpenseAmount = '" + expenseDetail.ExpenseAmount + "', Remarks = '" + expenseDetail.Remarks + "' WHERE Id = '" + expenseDetail.Id + "'";
+                SqlCommand command = new SqlCommand(strSql, conn);
+                command.CommandType = CommandType.Text;
+
+                countAffectedRow = command.ExecuteNonQuery();
+            }
+            catch (Exception exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return countAffectedRow;
+        }
+
         internal List<ExpenseDetail> GetAllExpenseDetail()
         {
             List<ExpenseDetail> objExpenseDetails = new List<ExpenseDetail>();

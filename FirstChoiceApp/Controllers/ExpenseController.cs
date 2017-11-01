@@ -118,12 +118,49 @@ namespace FirstChoiceApp.Controllers
             return Json(expenseTitles, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult ExpenseDetail()
+        public ViewResult ExpenseDetail(string sortOrder, string currentFilter, string searchString, int? page)
         {
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.ExpenseTitleSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.ExpenseAmountSortParm = String.IsNullOrEmpty(sortOrder) ? "amount_desc" : "";
+            ViewBag.ExpenseDateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "Date";
+            ViewBag.RemarksSortParm = String.IsNullOrEmpty(sortOrder) ? "remarks_desc" : "";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
             ExpenseManager objExpenseManager = new ExpenseManager();
 
-            var expenseDetail = objExpenseManager.GetAllExpenseDetail();
-            return View(expenseDetail);
+            var expenseDetails = objExpenseManager.GetAllExpenseDetail().OrderBy(x => x.ExpenseTitle).ToList();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                expenseDetails = objExpenseManager.GetAllExpenseDetail().Where(x => x.ExpenseTitle.ToLower().Contains(searchString.ToLower())).OrderBy(x => x.ExpenseTitle).ToList();
+            }
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    expenseDetails = expenseDetails.OrderBy(s => s.ExpenseTitle).ToList();
+                    break;
+                case "date_desc":
+                    expenseDetails = expenseDetails.OrderBy(s => s.ExpenseDate).ToList();
+                    break;
+                default:
+                    expenseDetails = expenseDetails.OrderByDescending(s => s.ExpenseDate).ToList();
+                    break;
+            }
+
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            return View(expenseDetails.ToPagedList(pageNumber, pageSize));
         }
 
         public ActionResult CreateExpenseDetail()
@@ -145,6 +182,37 @@ namespace FirstChoiceApp.Controllers
                 if (objExpenseManager.CreateExpenseDetail(expenseDetail))
                 {
                     ViewBag.Success = "Expense Added Successfully";
+                    ModelState.Clear();
+                }
+            }
+            catch (Exception exception)
+            {
+                ViewBag.Error = exception.Message;
+                return View();
+            }
+            return RedirectToAction("ExpenseDetail");
+        }
+
+        public ActionResult EditExpenseDetail(int? Id)
+        {
+            ExpenseManager objExpenseManager = new ExpenseManager();
+            ViewBag.ExpenseType = objExpenseManager.GetAllExpenseTypeList().ToList();
+            var expenseDetails = objExpenseManager.GetAllExpenseDetail().Where(x => x.Id == Id).FirstOrDefault();
+
+            return View(expenseDetails);
+        }
+
+        [HttpPost]
+        public ActionResult EditExpenseDetail(ExpenseDetail expenseDetail)
+        {
+            ExpenseManager objExpenseManager = new ExpenseManager();
+            ViewBag.ExpenseType = objExpenseManager.GetAllExpenseTypeList().ToList();
+
+            try
+            {
+                if (objExpenseManager.UpdateExpenseDetail(expenseDetail))
+                {
+                    ViewBag.Success = "Update expense Successfully";
                     ModelState.Clear();
                 }
             }

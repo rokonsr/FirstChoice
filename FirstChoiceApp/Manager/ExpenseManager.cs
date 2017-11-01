@@ -43,5 +43,10 @@ namespace FirstChoiceApp.Manager
         {
             return objExpenseGateway.GetAllExpenseDetail();
         }
+
+        internal bool UpdateExpenseDetail(ExpenseDetail expenseDetail)
+        {
+            return objExpenseGateway.UpdateExpenseDetail(expenseDetail) > 0;
+        }
     }
 }
