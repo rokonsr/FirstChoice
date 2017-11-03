@@ -3,6 +3,7 @@ using FirstChoiceApp.Models;
 using System.Data.SqlClient;
 using System.Data;
 using System.Collections.Generic;
+using FirstChoiceApp.Models.ViewModel;
 
 namespace FirstChoiceApp.Gateway
 {
@@ -73,6 +74,85 @@ namespace FirstChoiceApp.Gateway
                 conn.Close();
             }
             return countAffectedRow;
+        }
+
+        internal List<IncomeExpenseDetail> GetIncomeSummary(string StartDate, string EndDate)
+        {
+            List<IncomeExpenseDetail> objIncomeExpenseDetail = new List<IncomeExpenseDetail>();
+
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
+
+            try
+            {
+                SqlCommand command = new SqlCommand("uspGetIncomeSummary", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("StartDate", StartDate);
+                command.Parameters.AddWithValue("EndDate", EndDate);
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        IncomeExpenseDetail incomeExpense = new IncomeExpenseDetail()
+                        {
+                            Earning = Convert.ToDecimal(reader["Earning"]),
+                            Expense = Convert.ToDecimal(reader["Expense"]),
+                            Balance = Convert.ToDecimal(reader["Balance"])
+                        };
+                        objIncomeExpenseDetail.Add(incomeExpense);
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return objIncomeExpenseDetail;
+        }
+
+        internal List<IncomeExpenseDetail> GetIncomeExpenseDetail()
+        {
+            List<IncomeExpenseDetail> objIncomeExpenseDetail = new List<IncomeExpenseDetail>();
+
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
+
+            try
+            {
+                SqlCommand command = new SqlCommand("uspDailyIncome", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        IncomeExpenseDetail incomeExpense = new IncomeExpenseDetail()
+                        {
+                            D_Date = reader["D_Date"].ToString(),
+                            Earning = Convert.ToDecimal(reader["Earning"]),
+                            Expense = Convert.ToDecimal(reader["Expense"]),
+                            Balance = Convert.ToDecimal(reader["Balance"])
+                        };
+                        objIncomeExpenseDetail.Add(incomeExpense);
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                conn.Close();
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return objIncomeExpenseDetail;
         }
 
         internal List<ExpenseDetail> GetAllExpenseDetail()

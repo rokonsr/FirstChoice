@@ -1,0 +1,66 @@
+﻿@model IEnumerable<FirstChoiceApp.Models.ViewModel.IncomeExpenseDetail>
+
+@{
+    ViewBag.Title = "IncomeSummary";
+}
+
+<p class="page-title">Income Summary</p>
+<hr class="hr-title" />
+<br />
+
+@using (Html.BeginForm())
+{
+    <p>
+        <b>Start Date :</b> @Html.TextBox("StartDate", null, new { @class = "datePicker" })
+        <b>End Date :</b> @Html.TextBox("EndDate", null, new { @class = "datePicker" })
+        <input type="submit" value="Search" />
+    </p>
+}
+
+
+<table class="table">
+
+@if (Model != null)
+{
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Earning)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Expense)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Balance)
+        </th>
+    </tr>
+
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Earning)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Expense)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Balance)
+            </td>
+        </tr>
+    }
+}
+
+</table>
+
+@section Scripts {
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-ui.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(function () {
+                $(".datePicker").datepicker({ dateFormat: 'yy-mm-dd', type: Text });
+            });
+        });
+    </script>
+}

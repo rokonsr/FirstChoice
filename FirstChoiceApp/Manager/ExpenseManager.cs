@@ -3,6 +3,7 @@ using FirstChoiceApp.Models;
 using FirstChoiceApp.Gateway;
 using System.Collections.Generic;
 using System.Linq;
+using FirstChoiceApp.Models.ViewModel;
 
 namespace FirstChoiceApp.Manager
 {
@@ -47,6 +48,16 @@ namespace FirstChoiceApp.Manager
         internal bool UpdateExpenseDetail(ExpenseDetail expenseDetail)
         {
             return objExpenseGateway.UpdateExpenseDetail(expenseDetail) > 0;
+        }
+
+        internal List<IncomeExpenseDetail> GetIncomeExpenseDetail()
+        {
+            return objExpenseGateway.GetIncomeExpenseDetail();
+        }
+
+        internal List<IncomeExpenseDetail> GetIncomeSummary(string StartDate, string EndDate)
+        {
+            return objExpenseGateway.GetIncomeSummary(StartDate, EndDate);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using FirstChoiceApp.Manager;
 using FirstChoiceApp.Models;
+using FirstChoiceApp.Models.ViewModel;
 using PagedList;
 using System;
 using System.Linq;
@@ -222,6 +223,68 @@ namespace FirstChoiceApp.Controllers
                 return View();
             }
             return RedirectToAction("ExpenseDetail");
+        }
+
+        public ViewResult IncomeExpenseDetail(string sortOrder, string currentFilter, string searchString, int? page)
+        {
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+            ViewBag.IncomeSortParm = String.IsNullOrEmpty(sortOrder) ? "income_desc" : "";
+            ViewBag.ExpenseSortParm = String.IsNullOrEmpty(sortOrder) ? "expense_desc" : "Date";
+            ViewBag.BalanceSortParm = String.IsNullOrEmpty(sortOrder) ? "balance_desc" : "";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+            ExpenseManager objExpenseManager = new ExpenseManager();
+
+            var incomeExpenseDetails = objExpenseManager.GetIncomeExpenseDetail().OrderByDescending(x => x.D_Date).ToList();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                incomeExpenseDetails = objExpenseManager.GetIncomeExpenseDetail().Where(x => x.D_Date.ToLower().Contains(searchString.ToLower())).OrderByDescending(x => x.D_Date).ToList();
+            }
+            switch (sortOrder)
+            {
+                case "income_desc":
+                    incomeExpenseDetails = incomeExpenseDetails.OrderByDescending(s => s.Earning).ToList();
+                    break;
+                case "expense_desc":
+                    incomeExpenseDetails = incomeExpenseDetails.OrderByDescending(s => s.Expense).ToList();
+                    break;
+                case "balance_desc":
+                    incomeExpenseDetails = incomeExpenseDetails.OrderByDescending(s => s.Balance).ToList();
+                    break;
+                default:
+                    incomeExpenseDetails = incomeExpenseDetails.OrderBy(s => s.D_Date).ToList();
+                    break;
+            }
+
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            return View(incomeExpenseDetails.ToPagedList(pageNumber, pageSize));
+        }
+
+        public ActionResult IncomeSummary()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult IncomeSummary(string StartDate, string EndDate)
+        {
+            ExpenseManager objExpenseManager = new ExpenseManager();
+            var incomeExpenseDetails = objExpenseManager.GetIncomeSummary(StartDate, EndDate);
+
+            return View(incomeExpenseDetails);
         }
     }
 }

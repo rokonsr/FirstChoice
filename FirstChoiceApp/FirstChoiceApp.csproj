@@ -214,11 +214,18 @@
     <Compile Include="Models\SaleLedger.cs" />
     <Compile Include="Models\Size.cs" />
     <Compile Include="Models\SupplierInfo.cs" />
+    <Compile Include="Models\ViewModel\IncomeExpenseDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\images\ui-icons_444444_256x240.png" />
+    <Content Include="Content\images\ui-icons_555555_256x240.png" />
+    <Content Include="Content\images\ui-icons_777620_256x240.png" />
+    <Content Include="Content\images\ui-icons_777777_256x240.png" />
+    <Content Include="Content\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Content\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
@@ -302,6 +309,8 @@
     <Content Include="Views\Expense\CreateExpenseDetail.cshtml" />
     <Content Include="Views\Expense\ExpenseDetail.cshtml" />
     <Content Include="Views\Expense\EditExpenseDetail.cshtml" />
+    <Content Include="Views\Expense\IncomeExpenseDetail.cshtml" />
+    <Content Include="Views\Expense\IncomeSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

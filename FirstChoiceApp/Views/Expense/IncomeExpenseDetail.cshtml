@@ -1,0 +1,78 @@
+﻿@model PagedList.IPagedList<FirstChoiceApp.Models.ViewModel.IncomeExpenseDetail>
+@using PagedList.Mvc
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "IncomeExpenseDetail";
+}
+
+<p class="page-title">Daily Income Expense Statement</p>
+<hr class="hr-title" />
+<br />
+
+@using (Html.BeginForm())
+{
+    <p>
+        <b>Search By Date :</b> @Html.TextBox("SearchString", null, new { @class = "datePicker" } )
+        <input type="submit" value="Search" />
+    </p>
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Date", "IncomeExpenseDetail", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Income", "IncomeExpenseDetail", new { sortOrder = ViewBag.IncomeSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Expense", "IncomeExpenseDetail", new { sortOrder = ViewBag.ExpenseSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Balance", "IncomeExpenseDetail", new { sortOrder = ViewBag.BalanceSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.D_Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Earning)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Expense)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Balance)
+        </td>
+        @*<td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>*@
+    </tr>
+}
+
+</table>
+
+<hr class="hr-title" />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("IncomeExpenseDetail",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+@section Scripts {
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-ui.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(function () {
+                $(".datePicker").datepicker({ dateFormat: 'dd/mm/yy', type: Text });
+            });
+        });
+    </script>
+}
