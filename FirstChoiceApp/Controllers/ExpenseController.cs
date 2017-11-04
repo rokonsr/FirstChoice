@@ -58,20 +58,23 @@ namespace FirstChoiceApp.Controllers
         [HttpPost]
         public ActionResult CreateExpenseType(ExpenseType expenseType)
         {
-            try
+            if (ModelState.IsValid)
             {
-                ExpenseManager objExpenseManager = new ExpenseManager();
-
-                if (objExpenseManager.CreateExpenseType(expenseType))
+                try
                 {
-                    ViewBag.Success = "Expense Type Created Successfully";
-                    ModelState.Clear();
+                    ExpenseManager objExpenseManager = new ExpenseManager();
+
+                    if (objExpenseManager.CreateExpenseType(expenseType))
+                    {
+                        ViewBag.Success = "Expense Type Created Successfully";
+                        ModelState.Clear();
+                    }
                 }
-            }
-            catch (Exception exception)
-            {
-                ViewBag.Error = exception.Message;
-                return View();
+                catch (Exception exception)
+                {
+                    ViewBag.Error = exception.Message;
+                    return View();
+                }
             }
             return RedirectToAction("Index");
         }
@@ -87,20 +90,23 @@ namespace FirstChoiceApp.Controllers
         [HttpPost]
         public ActionResult EditExpenseType(ExpenseType expenseType)
         {
-            try
+            if (ModelState.IsValid)
             {
-                ExpenseManager objExpenseManager = new ExpenseManager();
-
-                if (objExpenseManager.UpdateExpenseType(expenseType))
+                try
                 {
-                    ViewBag.Success = "Expense Type Updated Successfully";
-                    ModelState.Clear();
+                    ExpenseManager objExpenseManager = new ExpenseManager();
+
+                    if (objExpenseManager.UpdateExpenseType(expenseType))
+                    {
+                        ViewBag.Success = "Expense Type Updated Successfully";
+                        ModelState.Clear();
+                    }
                 }
-            }
-            catch (Exception exception)
-            {
-                ViewBag.Error = exception.Message;
-                return View();
+                catch (Exception exception)
+                {
+                    ViewBag.Error = exception.Message;
+                    return View();
+                }
             }
             return RedirectToAction("Index");
         }
@@ -178,18 +184,21 @@ namespace FirstChoiceApp.Controllers
             ExpenseManager objExpenseManager = new ExpenseManager();
             ViewBag.ExpenseType = objExpenseManager.GetAllExpenseTypeList().ToList();
 
-            try
+            if (ModelState.IsValid)
             {
-                if (objExpenseManager.CreateExpenseDetail(expenseDetail))
+                try
                 {
-                    ViewBag.Success = "Expense Added Successfully";
-                    ModelState.Clear();
+                    if (objExpenseManager.CreateExpenseDetail(expenseDetail))
+                    {
+                        ViewBag.Success = "Expense Added Successfully";
+                        ModelState.Clear();
+                    }
                 }
-            }
-            catch (Exception exception)
-            {
-                ViewBag.Error = exception.Message;
-                return View();
+                catch (Exception exception)
+                {
+                    ViewBag.Error = exception.Message;
+                    return View();
+                }
             }
             return RedirectToAction("ExpenseDetail");
         }
@@ -209,18 +218,21 @@ namespace FirstChoiceApp.Controllers
             ExpenseManager objExpenseManager = new ExpenseManager();
             ViewBag.ExpenseType = objExpenseManager.GetAllExpenseTypeList().ToList();
 
-            try
+            if (ModelState.IsValid)
             {
-                if (objExpenseManager.UpdateExpenseDetail(expenseDetail))
+                try
                 {
-                    ViewBag.Success = "Update expense Successfully";
-                    ModelState.Clear();
+                    if (objExpenseManager.UpdateExpenseDetail(expenseDetail))
+                    {
+                        ViewBag.Success = "Update expense Successfully";
+                        ModelState.Clear();
+                    }
                 }
-            }
-            catch (Exception exception)
-            {
-                ViewBag.Error = exception.Message;
-                return View();
+                catch (Exception exception)
+                {
+                    ViewBag.Error = exception.Message;
+                    return View();
+                }
             }
             return RedirectToAction("ExpenseDetail");
         }

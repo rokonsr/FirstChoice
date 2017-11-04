@@ -157,6 +157,7 @@
     <Compile Include="Controllers\ItemController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MeasurementController.cs" />
+    <Compile Include="Controllers\OtherIncomeController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ProductTypeController.cs" />
     <Compile Include="Controllers\PurchaseController.cs" />
@@ -172,6 +173,7 @@
     <Compile Include="Gateway\ItemGateway.cs" />
     <Compile Include="Gateway\LoginGateway.cs" />
     <Compile Include="Gateway\MeasurementGateway.cs" />
+    <Compile Include="Gateway\OtherIncomeGateway.cs" />
     <Compile Include="Gateway\ProductGateway.cs" />
     <Compile Include="Gateway\ProductTypeGateway.cs" />
     <Compile Include="Gateway\PurchaseGateway.cs" />
@@ -189,6 +191,7 @@
     <Compile Include="Manager\ItemManager.cs" />
     <Compile Include="Manager\LoginManager.cs" />
     <Compile Include="Manager\MeasurementManager.cs" />
+    <Compile Include="Manager\OtherIncomeManager.cs" />
     <Compile Include="Manager\ProductManager.cs" />
     <Compile Include="Manager\ProductTypeManager.cs" />
     <Compile Include="Manager\PurchaseManager.cs" />
@@ -201,9 +204,11 @@
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\ExpenseDetail.cs" />
     <Compile Include="Models\ExpenseType.cs" />
+    <Compile Include="Models\IncomeType.cs" />
     <Compile Include="Models\Item.cs" />
     <Compile Include="Models\Login.cs" />
     <Compile Include="Models\Measurement.cs" />
+    <Compile Include="Models\OtherIncomeDetail.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductType.cs" />
     <Compile Include="Models\Purchase.cs" />
@@ -311,6 +316,9 @@
     <Content Include="Views\Expense\EditExpenseDetail.cshtml" />
     <Content Include="Views\Expense\IncomeExpenseDetail.cshtml" />
     <Content Include="Views\Expense\IncomeSummary.cshtml" />
+    <Content Include="Views\OtherIncome\CreateOtherIncome.cshtml" />
+    <Content Include="Views\OtherIncome\Index.cshtml" />
+    <Content Include="Views\OtherIncome\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -42,6 +42,7 @@ namespace FirstChoiceApp.Gateway
             catch (Exception exception)
             {
                 conn.Close();
+                string error = exception.Message;
             }
             finally
             {
@@ -68,6 +69,7 @@ namespace FirstChoiceApp.Gateway
             catch (Exception exception)
             {
                 conn.Close();
+                string error = exception.Message;
             }
             finally
             {
@@ -108,6 +110,7 @@ namespace FirstChoiceApp.Gateway
             catch (Exception exception)
             {
                 conn.Close();
+                string error = exception.Message;
             }
             finally
             {
@@ -147,6 +150,7 @@ namespace FirstChoiceApp.Gateway
             catch (Exception exception)
             {
                 conn.Close();
+                string error = exception.Message;
             }
             finally
             {
@@ -188,6 +192,7 @@ namespace FirstChoiceApp.Gateway
             catch (Exception exception)
             {
                 conn.Close();
+                string error = exception.Message;
             }
             finally
             {
@@ -217,6 +222,7 @@ namespace FirstChoiceApp.Gateway
             catch (Exception exception)
             {
                 conn.Close();
+                string error = exception.Message;
             }
             finally
             {
@@ -245,6 +251,7 @@ namespace FirstChoiceApp.Gateway
             catch (Exception exception)
             {
                 conn.Close();
+                string error = exception.Message;
             }
             finally
             {
@@ -278,6 +285,7 @@ namespace FirstChoiceApp.Gateway
             catch (Exception exception)
             {
                 conn.Close();
+                string error = exception.Message;
             }
             finally
             {

@@ -1,10 +1,10 @@
-﻿@model FirstChoiceApp.Models.ExpenseDetail
+﻿@model FirstChoiceApp.Models.OtherIncomeDetail
 
 @{
-    ViewBag.Title = "CreateExpenseDetail";
+    ViewBag.Title = "CreateOtherIncome";
 }
 
-<p class="page-title">Create Expense Detail</p>
+<p class="page-title">Create Other Income</p>
 <hr class="hr-title" />
 <br />
 
@@ -16,26 +16,26 @@
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.ExpenseTypeId, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.IncomeTypeId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.ExpenseTypeId, new SelectList(ViewBag.ExpenseType, "Id", "ExpenseTitle"), "--Select Expense Title--", new { @class = "ddl-style" })
-                @Html.ValidationMessageFor(model => model.ExpenseTypeId, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(model => model.IncomeTypeId, new SelectList(ViewBag.IncomeType, "Id", "IncomeTypeTitle"), "--Select Income Type--", new { @class = "ddl-style" })
+                @Html.ValidationMessageFor(model => model.IncomeTypeId, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ExpenseAmount, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.IncomeAmount, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ExpenseAmount)
-                @Html.ValidationMessageFor(model => model.ExpenseAmount, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.IncomeAmount)
+                @Html.ValidationMessageFor(model => model.IncomeAmount, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ExpenseDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.CreatedDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ExpenseDate, new { htmlAttributes = new { @class = "datePicker" } })
-                @Html.ValidationMessageFor(model => model.ExpenseDate, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.CreatedDate, new { htmlAttributes = new { @class = "datePicker" } })
+                @Html.ValidationMessageFor(model => model.CreatedDate, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -71,16 +71,10 @@
     <script src="~/Scripts/jquery-ui.js"></script>
 
     <script type="text/javascript">
-
         $(document).ready(function () {
             $(function () {
-                $(".datePicker").datepicker({ dateFormat: 'd M, yy', type: Text });
-            });
-
-            $("#PaidAmount").keyup(function () {
-                Balance();
+                $(".datePicker").datepicker({ dateFormat: 'dd M, yy', type: Text });
             });
         });
-
     </script>
 }

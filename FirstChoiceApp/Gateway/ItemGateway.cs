@@ -38,9 +38,10 @@ namespace FirstChoiceApp.Gateway
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
                 conn.Close();
+                string error = exception.Message;
             }
             finally
             {
@@ -71,9 +72,10 @@ namespace FirstChoiceApp.Gateway
 
                 countAffectedRow = command.ExecuteNonQuery();
             }
-            catch (Exception)
+            catch (Exception exception)
             {
                 conn.Close();
+                string error = exception.Message;
             }
             finally
             {
@@ -99,9 +101,10 @@ namespace FirstChoiceApp.Gateway
 
                 countAffectedRow = command.ExecuteNonQuery();
             }
-            catch (Exception)
+            catch (Exception exception)
             {
                 conn.Close();
+                string error = exception.Message;
             }
             finally
             {
