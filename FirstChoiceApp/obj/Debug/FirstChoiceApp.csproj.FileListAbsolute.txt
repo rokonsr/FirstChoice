@@ -138,7 +138,6 @@ D:\FirstChoiceApp\FirstChoiceApp\bin\Microsoft.AI.DependencyCollector.xml
 D:\FirstChoiceApp\FirstChoiceApp\bin\Microsoft.AI.ServerTelemetryChannel.xml
 D:\FirstChoiceApp\FirstChoiceApp\bin\Microsoft.AI.WindowsServer.xml
 D:\FirstChoiceApp\FirstChoiceApp\bin\Microsoft.AI.Web.xml
-D:\FirstChoiceApp\FirstChoiceApp\obj\Debug\FirstChoiceApp.csprojResolveAssemblyReference.cache
 D:\FirstChoiceApp\FirstChoiceApp\obj\Debug\FirstChoiceApp.csproj.CoreCompileInputs.cache
 D:\FirstChoiceApp\FirstChoiceApp\obj\Debug\FirstChoiceApp.dll
 D:\FirstChoiceApp\FirstChoiceApp\obj\Debug\FirstChoiceApp.pdb

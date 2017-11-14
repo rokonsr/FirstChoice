@@ -262,7 +262,7 @@ namespace FirstChoiceApp.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                incomeExpenseDetails = objExpenseManager.GetIncomeExpenseDetail().Where(x => x.D_Date.ToLower().Contains(searchString.ToLower())).OrderByDescending(x => x.D_Date).ToList();
+                incomeExpenseDetails = objExpenseManager.GetIncomeExpenseDetail().Where(x => x.D_Date == DateTime.Parse(searchString)).OrderByDescending(x => x.D_Date).ToList();
             }
             switch (sortOrder)
             {
@@ -276,7 +276,7 @@ namespace FirstChoiceApp.Controllers
                     incomeExpenseDetails = incomeExpenseDetails.OrderByDescending(s => s.Balance).ToList();
                     break;
                 default:
-                    incomeExpenseDetails = incomeExpenseDetails.OrderBy(s => s.D_Date).ToList();
+                    incomeExpenseDetails = incomeExpenseDetails.OrderByDescending(s => s.D_Date).ToList();
                     break;
             }
 

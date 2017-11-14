@@ -138,7 +138,7 @@ namespace FirstChoiceApp.Gateway
                     {
                         IncomeExpenseDetail incomeExpense = new IncomeExpenseDetail()
                         {
-                            D_Date = reader["D_Date"].ToString(),
+                            D_Date = Convert.ToDateTime(reader["D_Date"]),
                             Earning = Convert.ToDecimal(reader["Earning"]),
                             Expense = Convert.ToDecimal(reader["Expense"]),
                             Balance = Convert.ToDecimal(reader["Balance"])
