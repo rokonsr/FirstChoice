@@ -2,6 +2,7 @@
 using FirstChoiceApp.Models;
 using FirstChoiceApp.Gateway;
 using System.Collections.Generic;
+using FirstChoiceApp.Models.ViewModel;
 
 namespace FirstChoiceApp.Manager
 {
@@ -52,6 +53,11 @@ namespace FirstChoiceApp.Manager
         internal List<Product> GetAllProductByCodeInvoice(string productCode, string invoiceNo)
         {
             return objPurchaseGateway.GetAllProductByCodeInvoice(productCode, invoiceNo);
+        }
+
+        internal List<InvoiceSummaryPurchase> GetInvoiceDetil(string invoiceNo)
+        {
+            return objPurchaseGateway.GetInvoiceDetail(invoiceNo);
         }
     }
 }

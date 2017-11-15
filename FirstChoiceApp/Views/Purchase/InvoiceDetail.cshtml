@@ -1,0 +1,83 @@
+﻿@model IEnumerable<FirstChoiceApp.Models.ViewModel.InvoiceSummaryPurchase>
+
+@{
+    ViewBag.Title = "InvoiceDetail";
+}
+
+<p class="page-title">Purchase Detail by Invoice</p>
+<hr class="hr-title" />
+<br />
+
+@using (Html.BeginForm())
+{
+    <p>
+        @Html.TextBox("invoiceNo")
+        <input type="submit" value="Search" />
+    </p>
+}
+
+<table width="100%">
+    <tr>
+        <td style="font-weight:bolder;">
+            @Html.DisplayNameFor(model => model.SupplierName) : @ViewBag.SupplierName
+        </td>
+        <td style="font-weight:bolder;">
+            @Html.DisplayNameFor(model => model.InvoiceNo) : @ViewBag.InvoiceNo
+        </td>
+    </tr>
+</table>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.PurchaseDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PurchaseType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>
+    </tr>
+
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PurchaseDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PurchaseType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+            </tr>
+        }
+    }
+    <tr style="font-weight:bolder;">
+        <td colspan="5" style="text-align:right;">Total Amount : </td>
+        <td>@ViewBag.TotalAmount</td>
+    </tr>
+
+</table>

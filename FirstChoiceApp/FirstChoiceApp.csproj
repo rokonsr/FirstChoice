@@ -220,6 +220,8 @@
     <Compile Include="Models\Size.cs" />
     <Compile Include="Models\SupplierInfo.cs" />
     <Compile Include="Models\ViewModel\IncomeExpenseDetail.cs" />
+    <Compile Include="Models\ViewModel\InvoiceSummaryPurchase.cs" />
+    <Compile Include="Models\ViewModel\InvoiceSummarySale.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -319,6 +321,7 @@
     <Content Include="Views\OtherIncome\CreateOtherIncome.cshtml" />
     <Content Include="Views\OtherIncome\Index.cshtml" />
     <Content Include="Views\OtherIncome\Edit.cshtml" />
+    <Content Include="Views\Purchase\InvoiceDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

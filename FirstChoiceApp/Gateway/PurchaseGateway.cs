@@ -3,6 +3,7 @@ using FirstChoiceApp.Models;
 using System.Data.SqlClient;
 using System.Data;
 using System.Collections.Generic;
+using FirstChoiceApp.Models.ViewModel;
 
 namespace FirstChoiceApp.Gateway
 {
@@ -86,6 +87,51 @@ namespace FirstChoiceApp.Gateway
                 conn.Close();
             }
             return objProductList;
+        }
+
+        internal List<InvoiceSummaryPurchase> GetInvoiceDetail(string invoiceNo)
+        {
+            List<InvoiceSummaryPurchase> objInvoiceDetailList = new List<InvoiceSummaryPurchase>();
+
+            SqlConnection conn = new SqlConnection(strCon.Connection());
+            conn.Open();
+
+            try
+            {
+                SqlCommand command = new SqlCommand("uspPurchaseDetailByInvoice", conn);
+                command.Parameters.AddWithValue("InvoiceNo", invoiceNo);
+                command.CommandType = CommandType.StoredProcedure;
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        InvoiceSummaryPurchase objInvoiceDetail = new InvoiceSummaryPurchase()
+                        {
+                            SupplierName = reader["SupplierName"].ToString(),
+                            InvoiceNo = reader["InvoiceNo"].ToString(),
+                            PurchaseDate = reader["PurchaseDate"].ToString(),
+                            ProductName = reader["ProductName"].ToString(),
+                            PurchaseType = reader["PurchaseType"].ToString(),
+                            Quantity = Convert.ToDecimal(reader["Quantity"]),
+                            Price = Convert.ToDecimal(reader["Price"]),
+                            Amount = Convert.ToDecimal(reader["Amount"])
+                        };
+                        objInvoiceDetailList.Add(objInvoiceDetail);
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                conn.Close();
+                string error = exception.Message;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return objInvoiceDetailList;
         }
 
         internal List<Product> GetAllProductByCodeInvoice(string productCode, string invoiceNo)

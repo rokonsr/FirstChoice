@@ -323,5 +323,23 @@ namespace FirstChoiceApp.Controllers
             }
             return View();
         }
+
+        public ActionResult InvoiceDetail()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult InvoiceDetail(string invoiceNo)
+        {
+            PurchaseManager objPurchaseManager = new PurchaseManager();
+            var invoiceDetail = objPurchaseManager.GetInvoiceDetil(invoiceNo);
+
+            ViewBag.SupplierName = invoiceDetail.Distinct().Select(x => x.SupplierName).FirstOrDefault();
+            ViewBag.InvoiceNo = invoiceDetail.Distinct().Select(x => x.InvoiceNo).FirstOrDefault();
+            ViewBag.TotalAmount = invoiceDetail.Sum(x => x.Amount).ToString("0.00");
+
+            return View(invoiceDetail);
+        }
     }
 }
